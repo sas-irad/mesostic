@@ -1,3 +1,24 @@
 h1 {
     color: purple
 }
+
+.textfont {
+	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	font-weight:normal;
+	font-size: 14px;
+	color:#000;
+}
+
+.titlefont {
+	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	font-weight:normal;
+	font-size: 28px;
+	color:#404;
+}
+
+.sectionfont {
+	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	font-weight:normal;
+	font-size: 20px;
+	color:#000;
+}

@@ -14,9 +14,52 @@
         <script src="js/mesostomatic.js"></script>
     </head>
     <body>
-        <h1>Mesostomatic Poem Generator</h1>
-
-
-        <button onclick="alert(mesostomatic.parse());">Parse</button>
+        <h1 class="titlefont"><img src="images/john_cage.jpg" width="800" height="150" alt=""/></h1>
+    <table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr>
+              <td><div align="right"><span class="textfont">enter your spine word(s): </span></div></td>
+              <td>&nbsp;</td>
+              <td><span class="textfont">
+                <input name="spineword" type="text" id="spineword" size="40">
+              </span></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td><div align="right"><span class="textfont">enter your entry text:</span></div></td>
+              <td>&nbsp;</td>
+              <td><span class="textfont">
+                <textarea name="entrytext" cols="40" rows="10" id="entrytext"></textarea>
+              </span></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td><div align="right"><span class="textfont">choose a mesostic rule</span></div></td>
+              <td>&nbsp;</td>
+              <td><p>
+                <select name="mesorule" id="mesorule">
+                  <option value="50_rule">50% rule</option>
+                  <option value="100_rule">100% rule</option>
+                </select>
+              <span class="textfont"> Note: If you are choosing the 100% rule, you will be discarding a lot of words.</span></p></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+    </table>
+    <p class="textfont">&nbsp;</p>
+    <button onclick="alert(mesostomatic.parse());">Parse</button>
+        <p class="textfont"><a href="about.html">about</a> | xxx | xxx</p>
     </body>
 </html>
