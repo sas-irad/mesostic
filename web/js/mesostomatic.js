@@ -1,11 +1,11 @@
-window.mesotic = function(context) {
+window.mesotic = function() {
 
     //initialize or overwrite public mesostomatic API
-    var public = window.mesostic || {};
     var sourceArray;
     var spineArray;
     var resultObject;
     var options;
+    var pub = {}; 
 
     function createSourceArray(sourceText) {
 
@@ -41,9 +41,34 @@ window.mesotic = function(context) {
         return resultArray;
     }
 
-    function createResulteObject() {
-       //takes create line result and sends back nice line based objects         
-
+    function createResultObject() {
+        
+        
+        //takes create line result and sends back nice line based objects         
+        resultObject = {
+            'lines': [
+                {
+                    'left': 'some text for ',
+                    'spine': 'J',
+                    'right': 'some text'
+                },
+                {
+                    'left': 'some more text',
+                    'spine': 'o',
+                    'right': 'more text'
+                },
+                {
+                    'left': '',
+                    'spine': '',
+                    'right': ''
+                },
+                {
+                    'left': 'some more text',
+                    'spine': 'o',
+                    'right': 'more text'
+                },
+            ]
+        };
     }
 
     function getRandomBoolean() {
@@ -54,36 +79,33 @@ window.mesotic = function(context) {
         return Math.floor((index1 + index2)/2)
     }
 
-    //actually do the parsing
-    function doParse() {
-        return {
-            'parsed': true,
-            'parsing': [
-                {
-                    'left': 'some text',
-                    'spine': 'J',
-                    'right': 'some text'
-                },
-                {
-                    'left': 'some more text',
-                    'spine': 'o',
-                    'right': 'more text'
-                }
-            ]
-        };
-    }
-
     //public parse function
-    public.parse= function(spineWord, sourceText, options) {
-        options
+    pub.parse = function(spineWord, sourceText, myOptions) {
+        options = myOptions;
+
+        //create source array
         createSourceArray(sourceText);
-        createSpineArray(spineWord);
-        return doParse();
-    }
+
+        //parse for spine word
+        var parsingComplete = createSpineArray(spineWord);
     
+        //create and return ResultObject
+        createResultObject();
+        resultObject.parsingComplete = parsingComplete;
+        return resultObject;
 
-    //set the mesostomatic parser to the public api
-    window.mesostomatic = public;
+    };
 
-    return public;
-}(window);
+    //function to return actual text of the poem
+    pub.formatText = function(resultObject, formatType) {
+        var text = '';
+        for(var i = 0; i++; i < 4) {
+            text = text + i;
+        }    
+        return text;
+    };
+
+//set the mesostomatic parser to the public api
+    return pub;
+
+}();
