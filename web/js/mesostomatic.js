@@ -1,4 +1,4 @@
-window.mesotic = function() {
+window.mesostic = function() {
 
     //initialize or overwrite public mesostomatic API
     var sourceArray;
