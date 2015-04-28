@@ -8,16 +8,61 @@ window.mesotic = function() {
     var pub = {}; 
 
     function createSourceArray(sourceText) {
-
-        sourceArray = ['word1', 'word2'];
+        sourceArray = sourceText.split(" ");
     }
 
+    // Creates a spineArray and stores it in private variable
+    // Returns true if created, false if not
     function createSpineArray(sourceText, spineWord) {
+        createSourceArray(sourceText);
 
-        return [
-            {'spineLetter': 'J', 'index': 22},
-            {'spineLetter': 'J', 'index': 22}
-        ];        
+        var spine = spineWord.split(""),
+            spineLength = spine.length(),
+            currentSpineArray = new Array(), // Working Spine word
+            resultArray, // Only full spine words
+            rule = options.rule || '50',
+            loops = options.spineLoops || 1,
+            i = 0, // spine index
+            j = 0; // source index
+        
+        while (i < spineLength * loops) {
+            var currentSpineLetter = spine[i % spineLength],
+                nextSpineLetter = spine[(i+1) % spineLength],
+                prevSpineLetter = spine[(i-1) % spineLength],
+                currentWord = sourceArray[j % sourceArray.length],
+                letterIndex = currentWord.indexOf(currentSpineLetter) ;
+
+            if (letterIndex > -1) { // Spine Letter is in there
+                var success = {'spineLetter': currentSpineLetter, 'index': j,
+                    'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)}
+                if (rule === 'basic') {
+                    currentSpineArray[] = success;
+                }
+                else if (rule === '50') {
+                    if (currentWord.indexOf(nextSpineLetter === -1)) {
+                        currentSpineArray[] = success;
+                    }
+                }
+                else if (rule === '100') {
+                    if (currentWord.indexOf(nextSpineLetter) === -1 && 
+                        currentWord.indexOf(prevSpineLetter) === -1) {
+                            currentSpineArray[] = success;
+                    }
+                }
+            }
+
+            i++; // Easier mod math if we increment first
+            if (i % spineLetter === 0) {
+                resultArray = resultArray.concat([currentSpineArray]);
+                currentSpineArray = new Array();
+            }
+            j++;
+        }
+        spineArray = resultArray;
+        if (resultArray.length > 0) {
+            return true;
+        } else {
+            return false;
     }
 
     function parseLineWords( spineArraySlot1, spineArraySlot2) {
