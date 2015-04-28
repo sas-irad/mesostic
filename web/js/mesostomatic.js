@@ -20,7 +20,55 @@ window.mesotic = function() {
         ];        
     }
 
-    function parseLineWords(sourceIndex1, sourceIndex2, spineLetter1, spineLetter2) {
+    function parseLineWords( spineArraySlot1, spineArraySlot2) {
+
+
+	if (spineArraySlot1 == null)  // first letter in spine array
+        {
+	    // no splitbreak between null letter and first letter
+
+	    startBookend = '';
+	    preLineBreak = '';
+	    // no line break
+	    
+	    endBookend = spineArray[spineArraySlot2].spineLetter;
+	    postLineBreak = sourceArray[ spineArray[spineArraySlot2].index ];  // need to chop here based on pre/post
+
+	    count = 0;
+	    count = count + spineArray[spineArraySlot2].pre;
+
+	    // start the walk back to null
+	    for ($i = spineArray[spineArraySlot2].index-1; $i >= 0; $i--) {
+
+		if ( sourceArray[i].length + count <= 45) {
+
+		    // need to check for 0/50/100 rule
+		    
+		    if getRandomBoolean() {
+			    postLineBreak = sourceArray[i] + postLineBreak;
+			}
+
+
+	    }
+
+
+	}
+	else if (spineArraySlot2 == null)  // last letter in spine array
+	{
+	    // no splitbreak between last letter and null letter
+
+
+
+	}
+	else  // everything in between
+	{
+	    // get the random splitbreak between slots in the spine array
+	    var split = getRandomSplit( spineArray[spineArraySlot1].index, spineArray[spineArraySlot2].index );
+	    
+
+	}
+
+
         return {
             'startBookend': 'J',
             'preLineBreak': 'ohn Burbank',
@@ -32,11 +80,18 @@ window.mesotic = function() {
 
     function createLines() {
         resultArray = array();
-        resultArray[0] = parseLineWords(null, 0);
-        for(var i = 0; i< spineArray.length(); i++) {
-            resultArray[i] = parseLineWords();
+
+	//special case - first element of spineArray
+	resultArray[0] = parseLineWords( null, 0 );
+
+	// the "middle" cases
+        for(var i = 0; i < spineArray.length-1; i++) {
+
+            resultArray[i+1] = parseLineWords( i, i+1 );
         }
-        resultArray[last] = parseLineWords(last, null);
+
+	// special case - last element of spineArray, null
+	resultArray[spineArray.length] = parseLineWords( spineArray.length-1, null);
         
         return resultArray;
     }
