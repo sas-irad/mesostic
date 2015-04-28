@@ -18,7 +18,7 @@
     <table width="800" border="0" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
-              <td><div align="right"><span class="textfont">enter your spine word(s): </span></div></td>
+              <td><div align="right"><span class="textfont">spine word(s)?</span></div></td>
               <td>&nbsp;</td>
               <td><span class="textfont">
                 <input name="spineword" type="text" id="spineword" size="72">
@@ -30,16 +30,26 @@
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td><div align="right"><span class="textfont">enter your source text:</span></div></td>
+              <td><div align="right"><span class="textfont">source text?</span></div></td>
               <td>&nbsp;</td>
               <td><span class="textfont">
                 <textarea name="sourcetext" cols="72" rows="10" id="sourcetext"></textarea>
               </span></td>
             </tr>
             <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
               <td><div align="right"><span class="textfont">number of mesostics?</span></div></td>
               <td>&nbsp;</td>
               <td><input name="number_mesostics" type="text" id="number_mesostics" size="5" maxlength="5"></td>
+            </tr>
+            <tr>
+              <td class="textfont">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
             </tr>
             <tr>
               <td class="textfont"><div align="right">where stanzas break?</div></td>
@@ -51,12 +61,29 @@
               </select></td>
             </tr>
             <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
               <td><div align="right"><span class="textfont">strip punctuation?</span></div></td>
               <td>&nbsp;</td>
-              <td><select name="strip_punctuation" id="strip_punctuation">
-                <option value="1">yes</option>
-                <option value="0">no</option>
-              </select></td>
+              <td><table width="100" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td><input name="strip_punctuation" type="radio" id="radio" value="1" checked>
+                    <span class="textfont">yes</span></td>
+                    <td>&nbsp;</td>
+                    <td><input type="radio" name="strip_punctuation" id="radio2" value="0">
+                    <label for="strip_punctuation" class="textfont">no</label></td>
+                  </tr>
+                </tbody>
+              </table></td>
+            </tr>
+            <tr>
+              <td class="textfont">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
             </tr>
             <tr>
               <td class="textfont"><div align="right">how sparse wing text?</div></td>
@@ -68,14 +95,29 @@
               </select></td>
             </tr>
             <tr>
-              <td><div align="right"><span class="textfont">choose a mesostic rule</span></div></td>
+              <td valign="top">&nbsp;</td>
               <td>&nbsp;</td>
-              <td><p>
-                <select name="mesorule" id="mesorule">
-                  <option value="50">50% rule</option>
-                  <option value="100">100% rule</option>
-                </select>
-              <span class="textfont"> Note: If you are choosing the 100% rule, you will be discarding a lot of words.</span></p></td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td valign="top"><div align="right"><span class="textfont">mesostic rule?</span></div></td>
+              <td>&nbsp;</td>
+              <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                      <td><input name="mesostic_rule" type="radio" id="radio3" value="radio3" checked>
+                      <label for="mesostic_rule3" class="textfont">50% rule</label></td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td><input type="radio" name="mesostic_rule" id="radio4" value="radio4">
+                      <label for="mesostic_rule2" class="textfont">100% rule</label></td>
+                      <td>&nbsp;</td>
+                      <td><span class="purpletextfont">Note: If you are choosing the 100% rule, you will be discarding a lot of words.</span></td>
+                    </tr>
+                  </tbody>
+                </table></td>
             </tr>
             <tr>
               <td><div align="right" class="textfont"></div></td>

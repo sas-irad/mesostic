@@ -9,6 +9,13 @@ h1 {
 	color:#000;
 }
 
+.purpletextfont {
+	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	font-weight:normal;
+	font-size: 14px;
+	color:#404;
+}
+
 .titlefont {
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	font-weight:normal;
