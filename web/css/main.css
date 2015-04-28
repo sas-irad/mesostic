@@ -22,3 +22,10 @@ h1 {
 	font-size: 20px;
 	color:#000;
 }
+
+.courierfont {
+	font-family:Consolas, "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", Monaco, "Courier New", monospace
+	font-weight:normal;
+	font-size: 14px;
+	color:#000;
+}
