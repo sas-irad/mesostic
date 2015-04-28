@@ -68,7 +68,7 @@
             <tr>
               <td><div align="right"><span class="textfont">strip punctuation?</span></div></td>
               <td>&nbsp;</td>
-              <td><table width="100" border="0" cellspacing="0" cellpadding="0">
+              <td><table width="125" border="0" cellspacing="0" cellpadding="0">
                 <tbody>
                   <tr>
                     <td><input name="strip_punctuation" type="radio" id="radio" value="1" checked>
@@ -86,13 +86,21 @@
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td class="textfont"><div align="right">how sparse wing text?</div></td>
+              <td valign="top" class="textfont"><div align="right">how sparse wing text?</div></td>
               <td>&nbsp;</td>
-              <td><select name="sparse_wing_text" id="sparse_wing_text">
-                <option value="option1">option1</option>
-                <option value="option2">option2</option>
-                <option value="option3">option3</option>
-              </select></td>
+              <td><table width="200" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                      <td><input name="sparse_wing_text" type="radio" id="radio5" value="0" checked>                        <span class="textfont">normal</span></td>
+                    </tr>
+                    <tr>
+                      <td><input type="radio" name="sparse_wing_text" id="radio6" value="1">                        <span class="textfont">sparse</span></td>
+                    </tr>
+                    <tr>
+                      <td><input type="radio" name="sparse_wing_text" id="radio7" value="2">                        <span class="textfont">very sparse</span></td>
+                    </tr>
+                </tbody>
+                </table></td>
             </tr>
             <tr>
               <td valign="top">&nbsp;</td>
@@ -127,6 +135,6 @@
           </tbody>
     </table>
     <button onclick="alert(mesostomatic.parse());">Parse</button>
-        <p class="textfont"><a href="about.html">about</a> | xxx | xxx</p>
+        <p class="textfont"><a href="about.html">about the project</a></p>
     </body>
 </html>
