@@ -12,6 +12,7 @@
 
         <link rel="stylesheet" href="css/main.css">
         <script src="js/mesostomatic.js"></script>
+        <script src="js/vendor/pad.js"></script>
     </head>
     <body>
         <h1 class="titlefont"><img src="images/john_cage.jpg" width="800" height="150" alt=""/></h1>
@@ -154,13 +155,8 @@
             </tr>
           </tbody>
     </table>
-    <button onclick="alert(mesostomatic.parse());">Parse</button>
+    <button onclick="alert(mesostic.formatText(mesostic.parse()));">Parse</button>
         <p class="textfont"><a href="about.html">about the project</a></p>
-        <h1>Mesostomatic Poem Generator</h1>
-
-
-        <button onclick="alert(JSON.stringify(mesostic.parse()));">Parse</button>
-
 <pre id="mesotic_content">
                                    let us maKe
                                        of thIs
