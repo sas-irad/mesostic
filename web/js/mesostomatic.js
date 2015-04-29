@@ -199,8 +199,11 @@ window.mesostic = function() {
     //function to return actual text of the poem
     pub.formatText = function(resultObject, formatType) {
         var text = '';
-        for(var i = 0; i++; i < 4) {
-            text = text + i;
+        var lines = resultObject.lines;
+        for(var i = 0; i < lines.length; i++) {
+            text = text + pad(lines[i]['left'], 45, ' ', STR_PAD_LEFT);
+            text = text + lines[i]['spine'];
+            text = text + pad(lines[i]['right'], 45, ' ', STR_PAD_LEFT);
         }    
         return text;
     };
