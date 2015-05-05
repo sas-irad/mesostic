@@ -1,5 +1,5 @@
-# mesostomatic
-A mesostomatic poem generator written in javascript
+# mesostic
+A mesostic poem generator written in javascript
 
 ## Project Goals
 The purpose of this project is to replicate in javascript the functionality of a mesostomatic poem generator written by Nicki Hoffman in Python.  
