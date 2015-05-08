@@ -55,7 +55,7 @@ window.mesostic = function() {
      * @TODO Make sure double spaces " " get stripped out
      */
     function createSourceArray(sourceText, options) {
-        sourceArray = sourceText.split(" ");
+        var sourceArray = sourceText.split(" ");
         return sourceArray;
     }
 
@@ -70,7 +70,8 @@ window.mesostic = function() {
      */
     function createSpineArray(sourceArray, spineWord, options) {
 
-        var spine = spineWord.split(""),
+        var spineArray,
+            spine = spineWord.split(""),
             spineLength = spine.length,
             currentSpineArray = new Array(), // Working Spine word
             resultArray = [], // Only full spine words
