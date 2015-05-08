@@ -1,25 +1,79 @@
 window.mesostic = function() {
 
-    //initialize or overwrite public mesostomatic API
+    /**
+     * Array of words from the source text formatted according to options
+     */
     var sourceArray;
-    var spineArray;
+    
+    /**
+     * Array of spineWords that were identified in the following form
+     * {
+     *    spineLetter: "J", (the spine letter)
+     *    index: 32, (the index of the source word)
+     *    pre: 3, (number of letters preceding spine letter in source word)
+     *    post: 4, (number of letters following spine letter in source word)
+     */ 
+    var spineArray; 
+
+    /**
+     * Result of the parsing in the following form
+     * {
+     *     parsed: true, (boolean indicating if parsing was successful)
+     *     lines: [
+     *         {preSpine: "let us ma", spine: "K", postSpine: "e glad"},
+     *         {preSpine: "of th", spine: "I", postSpine: "s again for"},
+     *         {preSpine: "", spine: "", postSpine: ""}, (empty line)
+     *         {preSpine: "of the o", spine: "N", postSpine: "e thing too"}
+     *     ]
+     * }
+     */
     var resultObject;
-    var options;
+    
+    /**
+     * The Array of options to be set for parsing
+     * {
+     *      rule: "basic"|"50"|"100", (rule of picking spine word - defaults to 50)
+     *      spineLoops: 1, (number of time to loop through spine word - defaults to 1),
+     *      stripPunctuation: true, (flag to remove punctuation from the source text or not)
+     *      stanzaBreaks: "spineWord"|"random"|[0-9]+, (when to make stanza breaks, defaults to spineWord)
+     *      wingTextSparsity: "normal"|"sparse"|"very sparse"
+     * }
+     */
+    var options = {};
+
+
+    /**
+     * The public object that will be returned
+     */
     var pub = {}; 
 
-    function createSourceArray(sourceText) {
+    /**
+     * Creates an array of source words out of a source text
+     *
+     * @param  string sourceText 
+     *
+     * @TODO Make sure double spaces " " get stripped out
+     */
+    function createSourceArray(sourceText, options) {
         sourceArray = sourceText.split(" ");
+        return sourceArray;
     }
 
-    // Creates a spineArray and stores it in private variable
-    // Returns true if created, false if not
-    function createSpineArray(sourceText, spineWord) {
-        createSourceArray(sourceText);
+
+    
+    /**
+     * Steps through the sourceArray and looks for spine word letters and saves in spineArray
+     *
+     * @return boolean  True if able to create / False if not
+     *
+     * @TODO Figure out how to handle punctuation and spaces in spine word
+     */
+    function createSpineArray(sourceArray, spineWord, options) {
 
         var spine = spineWord.split(""),
-            spineLength = spine.length(),
+            spineLength = spine.length,
             currentSpineArray = new Array(), // Working Spine word
-            resultArray, // Only full spine words
+            resultArray = [], // Only full spine words
             rule = options.rule || '50',
             loops = options.spineLoops || 1,
             i = 0, // spine index
@@ -36,23 +90,23 @@ window.mesostic = function() {
                 var success = {'spineLetter': currentSpineLetter, 'index': j,
                     'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)}
                 if (rule === 'basic') {
-                    currentSpineArray[] = success;
+                    currentSpineArray.push(success);
                 }
                 else if (rule === '50') {
                     if (currentWord.indexOf(nextSpineLetter === -1)) {
-                        currentSpineArray[] = success;
+                        currentSpineArray.push(success);
                     }
                 }
                 else if (rule === '100') {
                     if (currentWord.indexOf(nextSpineLetter) === -1 && 
                         currentWord.indexOf(prevSpineLetter) === -1) {
-                            currentSpineArray[] = success;
+                            currentSpineArray.push(success);
                     }
                 }
             }
 
             i++; // Easier mod math if we increment first
-            if (i % spineLetter === 0) {
+            if (i % spineLength === 0) {
                 resultArray = resultArray.concat([currentSpineArray]);
                 currentSpineArray = new Array();
             }
@@ -60,115 +114,142 @@ window.mesostic = function() {
         }
         spineArray = resultArray;
         if (resultArray.length > 0) {
-            return true;
+            return {
+                parsed: true,
+                spineArray: spineArray
+            };
         } else {
-            return false;
+            return {
+                parsed: false,
+                spineArray: currentSpineArray
+            }
+        }
     }
 
-    function parseLineWords( spineArraySlot1, spineArraySlot2) {
+
+    /**
+     * Function to take two spine letters and find the words that should occur between them
+     *
+     * What the function will return is all the necessary parts of the text in the following form  
+     *
+     * @param integer spineArraySlot1 - the index of the beginning spine letter
+     * @param integer spineArraySlot2 - the index of the end spine letter
+     * @param Array   spineArray      - the Array of spineLetters
+     * @param Array   sourceArray     - the Array of sourceWords
+     * @param object  options         - options
+     *
+     * @return object - in the following form  {
+     *     'startSpineLetter': 'J',
+     *     'preLineBreak': 'ohn Burbank',
+     *      //the line break of display poem    
+     *     'postLineBreak': 'in the castl',
+     *     'endSpineLetter': 'E'
+     * };
+     */
+    function parseLineWords( spineArraySlot1, spineArraySlot2, spineArray, sourceArray, options) {
 
 
-	if (spineArraySlot1 == null)  // first letter in spine array
+        if (spineArraySlot1 == null)  // first letter in spine array
         {
-	    // no splitbreak between null letter and first letter
+            // no splitbreak between null letter and first letter
 
-	    startBookend = '';
-	    preLineBreak = '';
-	    // no line break
-	    
-	    endBookend = spineArray[spineArraySlot2].spineLetter;
-	    postLineBreak = sourceArray[ spineArray[spineArraySlot2].index ];  // need to chop here based on pre/post
+            startBookend = '';
+            preLineBreak = '';
+            // no line break
+            
+            endBookend = spineArray[spineArraySlot2].spineLetter;
+            postLineBreak = sourceArray[ spineArray[spineArraySlot2].index ];  // need to chop here based on pre/post
 
-	    count = 0;
-	    count = count + spineArray[spineArraySlot2].pre;
+            count = 0;
+            count = count + spineArray[spineArraySlot2].pre;
 
-	    // start the walk back to null
-	    for ($i = spineArray[spineArraySlot2].index-1; $i >= 0; $i--) {
+            // start the walk back to null
+            for ($i = spineArray[spineArraySlot2].index-1; $i >= 0; $i--) {
 
-		if ( sourceArray[i].length + count <= 45) {
+                if ( sourceArray[i].length + count <= 45) {
 
-		    // need to check for 0/50/100 rule
-		    
-		    if getRandomBoolean() {
-			    postLineBreak = sourceArray[i] + postLineBreak;
-			}
-
-
-	    }
+                    // need to check for 0/50/100 rule
+                    
+                    if (getRandomBoolean()) {
+                        postLineBreak = sourceArray[i] + postLineBreak;
+                    }
 
 
-	}
-	else if (spineArraySlot2 == null)  // last letter in spine array
-	{
+                }
+
+
+            }
+        }
+        else if (spineArraySlot2 == null)  // last letter in spine array
+        {
 	    // no splitbreak between last letter and null letter
 
 
 
-	}
-	else  // everything in between
-	{
-	    // get the random splitbreak between slots in the spine array
-	    var split = getRandomSplit( spineArray[spineArraySlot1].index, spineArray[spineArraySlot2].index );
-	    
+        }
+        else  // everything in between
+        {
+            // get the random splitbreak between slots in the spine array
+            var split = getRandomSplit( spineArray[spineArraySlot1].index, spineArray[spineArraySlot2].index );
+            
 
-	}
+        }
 
 
         return {
-            'startBookend': 'J',
+            'startSpineLetter': 'J',
             'preLineBreak': 'ohn Burbank',
             //the line break of display poem    
             'postLineBreak': 'in the castl',
-            'endBookend': 'E'
+            'endSpineLetter': 'E'
         };
     }
 
-    function createLines() {
-        resultArray = array();
 
-	//special case - first element of spineArray
-	resultArray[0] = parseLineWords( null, 0 );
+    /**
+     * Function which uses the the spineArray and sourceArray to create the actual lines of the poem
+     * 
+     * @param Array spineArray   The array of spine letters
+     * @param Array sourceArray  The Array of source words
+     * @param Object options     Object containing options
+     *
+     * @TODO implement stanza break oprions
+     */
 
-	// the "middle" cases
+    function createLines(spineArray, sourceArray, options) {
+        var previousPostLineBreak; //the postLineBreak text retrieved from previous parsed words
+        var lines = [];
+        var parsedWords;
+
+	    //special case - first element of spineArray
+        parsedWords = parseLineWords(null, 0, spineArray, sourceArray, options);
+	    previousPostLineBreak = parsedWords.postLineBreak;
+        
+	    // loop through each spine letter and get corresponding line
         for(var i = 0; i < spineArray.length-1; i++) {
+            
+            //find the words between this spine letter and the next
+            parsedWords = parseLineWords(i, i+1, spineArray, sourceArray, options);
 
-            resultArray[i+1] = parseLineWords( i, i+1 );
+            lines.push({
+                preSpine: previousPostLineBreak,
+                spine: parsedWords.startSpineLetter,
+                postSpine: prasedWords.preLineBreak
+            });
+
+            previousPostLineBreak = parsedWords.postLineBreak;
         }
 
-	// special case - last element of spineArray, null
-	resultArray[spineArray.length] = parseLineWords( spineArray.length-1, null);
-        
-        return resultArray;
-    }
+	    // special case - last element of spineArray
+	    parsedWords = parseLineWords(spineArray.length-1, null, spineArray, sourceArray, options)
+        lines.push({
+            preSpine: previousPostLineBreak,
+            spine: parsedWords.startSpineLetter,
+            postSpine: parsedWords.preLineBreak 
+        });
 
-    function createResultObject() {
-        
-        
-        //takes create line result and sends back nice line based objects         
-        resultObject = {
-            'lines': [
-                {
-                    'left': 'some text for ',
-                    'spine': 'J',
-                    'right': 'some text'
-                },
-                {
-                    'left': 'some more text',
-                    'spine': 'o',
-                    'right': 'more text'
-                },
-                {
-                    'left': '',
-                    'spine': '',
-                    'right': ''
-                },
-                {
-                    'left': 'some more text',
-                    'spine': 'o',
-                    'right': 'more text'
-                },
-            ]
-        };
+
+        return lines;
     }
 
     function getRandomBoolean() {
@@ -184,14 +265,15 @@ window.mesostic = function() {
         options = myOptions;
 
         //create source array
-        createSourceArray(sourceText);
+        var sourceArray = createSourceArray(sourceText, options);
 
         //parse for spine word
-        var parsingComplete = createSpineArray(spineWord);
+        var parsing  = createSpineArray(sourceArray, spineWord, options);
     
+        var resultObject = {parsed: parsing.parsed};
+
         //create and return ResultObject
-        createResultObject();
-        resultObject.parsingComplete = parsingComplete;
+        resultObject.lines = createLines(parsing.spineArray, sourceArray, options);
         return resultObject;
 
     };
@@ -201,14 +283,22 @@ window.mesostic = function() {
         var text = '';
         var lines = resultObject.lines;
         for(var i = 0; i < lines.length; i++) {
-            text = text + pad(lines[i]['left'], 45, ' ', STR_PAD_LEFT);
+            text = text + pad(lines[i]['preSpine'], 45, ' ', STR_PAD_LEFT);
             text = text + lines[i]['spine'];
-            text = text + pad(lines[i]['right'], 45, ' ', STR_PAD_LEFT);
+            text = text + pad(lines[i]['postSpine'], 45, ' ', STR_PAD_LEFT);
         }    
         return text;
     };
 
-//set the mesostomatic parser to the public api
+    /* test-code */
+    //These added so internal methods can be tested
+    pub._createSourceArray = createSourceArray;
+    pub._createLines = createLines;
+    pub._createSpineArray = createSpineArray;
+    pub._parseLineWords = parseLineWords;
+    /* end-test-code */
+
+    //set the mesostomatic parser to the public api
     return pub;
 
 }();
