@@ -16,6 +16,7 @@
     </head>
     <body>
         <h1 class="titlefont"><img src="images/john_cage.jpg" width="800" height="150" alt=""/></h1>
+    <form id="mesosticForm">
     <table width="800" border="0" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
@@ -64,13 +65,13 @@ His teachers included Henry Cowell (1933) and Arnold Schoenberg (1933–35), bot
               <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                      <td><input name="stanzas_break" type="radio" id="radio8" value="0" checked>
+                      <td><input name="stanzas_break" type="radio" id="radio8" value="random" checked>
                         <span class="textfont">randomly</span></td>
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
                     </tr>
                     <tr>
-                      <td><input type="radio" name="stanzas_break" id="radio9" value="1">
+                      <td><input type="radio" name="stanzas_break" id="radio9" value="spineWord">
                         <span class="textfont">after every spine word</span></td>
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
@@ -109,19 +110,19 @@ His teachers included Henry Cowell (1933) and Arnold Schoenberg (1933–35), bot
               <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                      <td><input name="sparse_wing_text" type="radio" id="radio5" value="0" checked>
+                      <td><input name="sparse_wing_text" type="radio" id="radio5" value="normal" checked>
                       <span class="textfont">normal</span></td>
                       <td>&nbsp;</td>
                       <td><span class="purpletextfont">Note: Sparse wing text is the number of words between the spine words.</span></td>
                     </tr>
                     <tr>
-                      <td><input type="radio" name="sparse_wing_text" id="radio6" value="1">
+                      <td><input type="radio" name="sparse_wing_text" id="radio6" value="sparse">
                       <span class="textfont">sparse</span></td>
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
                     </tr>
                     <tr>
-                      <td><input type="radio" name="sparse_wing_text" id="radio7" value="2">
+                      <td><input type="radio" name="sparse_wing_text" id="radio7" value="very sparse">
                       <span class="textfont">very sparse</span></td>
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
@@ -161,6 +162,7 @@ His teachers included Henry Cowell (1933) and Arnold Schoenberg (1933–35), bot
             </tr>
           </tbody>
     </table>
+    </form>
     <button onclick="doParse();">Parse</button>
         <p class="textfont"><a href="about.html">about the project</a></p>
 <pre id="mesostic_content">
@@ -170,18 +172,35 @@ His teachers included Henry Cowell (1933) and Arnold Schoenberg (1933–35), bot
 
     </body>
     <script type="text/javascript">
+        getRadioVal = function (name) {
+            var val;
+            // get list of radio buttons with specified name
+            var radios = document.getElementById('mesosticForm').elements[name];
+            
+            // loop through list of radio buttons
+            for (var i=0, len=radios.length; i<len; i++) {
+                if ( radios[i].checked ) { // radio checked?
+                    val = radios[i].value; // if so, hold its value in val
+                    break; // and break out of for loop
+                }
+            }
+            return val; // return value of checked radio or undefined if none checked
+        };
+
         function doParse() {
             var spineWords = document.getElementById('spineword').value;
             var sourceText = document.getElementById('sourcetext').value;
             var options = {
-                rule: 50,
-                spineLoops: 1,
-                stripPunctuation: true,
-                stanzaBreaks: "spineWord",
-                wingTextSparsity: "normal"
+                rule: getRadioVal('mesostic_rule'),
+                spineLoops: document.getElementById('number_mesostics').value,
+                stripPunctuation: getRadioVal('strip_punctuation') === "1",
+                stanzaBreaks: getRadioVal('stanzas_break'),
+                wingTextSparsity: getRadioVal('sparse_wing_text')
             };
+            console.log(options);
             var result = mesostic.parse(spineWords, sourceText, options);
             document.getElementById('mesostic_content').innerHTML = mesostic.formatText(result);
+            return result;
         }
     </script>
 </html>
