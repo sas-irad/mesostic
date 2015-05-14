@@ -59,8 +59,14 @@ window.mesostic = function() {
         return sourceArray;
     }
 
+    /**
+     * function that takes a spineWord and strips out anything that isn't a letter
+     */
+    function createSpine(spineWord, options)
+    {
+        return spineWord.replace(/[^A-Za-z]/g,'');
 
-    
+    }    
     /**
      * Steps through the sourceArray and looks for spine word letters and saves in spineArray
      *
@@ -70,13 +76,13 @@ window.mesostic = function() {
      */
     function createSpineArray(sourceArray, spineWord, options) {
 
-        var spineArray,
-            spine = spineWord.split(""),
+        var spine = createSpine(spineWord).split(""),
             spineLength = spine.length,
             currentSpineArray = new Array(), // Working Spine word
-            resultArray = [], // Only full spine words
+            resultArray = new Array(), // Only full spine words
             rule = options.rule || '50',
             loops = options.spineLoops || 1,
+            found = false,
             i = 0, // spine index
             j = 0; // source index
         
@@ -92,39 +98,42 @@ window.mesostic = function() {
                     'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)}
                 if (rule === 'basic') {
                     currentSpineArray.push(success);
+                    found = true;
                 }
                 else if (rule === '50') {
                     if (currentWord.indexOf(nextSpineLetter === -1)) {
                         currentSpineArray.push(success);
+                        found = true;
                     }
                 }
                 else if (rule === '100') {
                     if (currentWord.indexOf(nextSpineLetter) === -1 && 
                         currentWord.indexOf(prevSpineLetter) === -1) {
                             currentSpineArray.push(success);
+                            found = true;
                     }
                 }
             }
-
-            i++; // Easier mod math if we increment first
-            if (i % spineLength === 0) {
-                resultArray = resultArray.concat([currentSpineArray]);
-                currentSpineArray = new Array();
+            if (found) {
+                i++;
+                if (i % spineLength === 0) {
+                    resultArray.push(currentSpineArray);
+                    currentSpineArray = new Array();
+                }
+                found = false;
             }
             j++;
-        }
-        spineArray = resultArray;
-        if (resultArray.length > 0) {
-            return {
-                parsed: true,
-                spineArray: spineArray
-            };
-        } else {
-            return {
-                parsed: false,
-                spineArray: currentSpineArray
+
+            //give up after 10 tries through the source text if you haven't found one yet 
+            if (j > sourceArray.length * 10 && resultArray.length == 0) {
+                return {parsed: false, spineArray: new Array(currentSpineArray)};
             }
         }
+        return {
+            parsed: true,
+            spineArray: resultArray
+        };
+       
     }
 
 
@@ -221,7 +230,7 @@ window.mesostic = function() {
         var previousPostLineBreak; //the postLineBreak text retrieved from previous parsed words
         var lines = [];
         var parsedWords;
-
+        
 	    //special case - first element of spineArray
         parsedWords = parseLineWords(null, 0, spineArray, sourceArray, options);
 	    previousPostLineBreak = parsedWords.postLineBreak;

@@ -85,8 +85,8 @@ QUnit.test( "createSpineArray", function( assert ) {
         'alive',      //5 'l' for  100
         'source',     //6 'o' for basic, 50, 100
         'array',      //7
-        'that',       //8 't' for basic, 50
-        'itches',     //9 't' for 100 (1 loop)
+        'their',       //8 't' for basic, 50
+        'itches',     //9 
         'into',       //10 't' for 100 (2 loops)
         'the',        //11
         'summer',     //12
@@ -97,35 +97,64 @@ QUnit.test( "createSpineArray", function( assert ) {
     
     //basic one loop
     spineArray = testFunc(sourceArray, spineWord, options);
-    expectedResult = {parsed: true, spineArray: [
+    expectedResult = {parsed: true, spineArray: [[
         {spineLetter: 's', index:1, pre:1, post:0},//is
         {spineLetter: 'l', index:3, pre:0, post:4},//lovely
         {spineLetter: 'o', index:6, pre:1, post:4},//source
-        {spineLetter: 't', index:8, pre:0, post:3},//that
-    ]};
+        {spineLetter: 't', index:8, pre:0, post:4},//that
+    ]]};
     assert.deepEqual(spineArray, expectedResult, 'basic 1 loop');
 
     //50% one loop
     options.rule = "50";
     spineArray = testFunc(sourceArray, spineWord, options);
-    expectedResult = {parsed: true, spineArray: [
+    expectedResult = {parsed: true, spineArray: [[
         {spineLetter: 's', index:1, pre:1, post:0},//is
         {spineLetter: 'l', index:4, pre:2, post:3},//silver
         {spineLetter: 'o', index:6, pre:1, post:4},//source
-        {spineLetter: 't', index:8, pre:0, post:3},//that
-    ]};
+        {spineLetter: 't', index:8, pre:0, post:4},//that
+    ]]};
     assert.deepEqual(spineArray, expectedResult, '50% 1 loop');
     
     //100% one loop
     options.rule = "100";
     spineArray = testFunc(sourceArray, spineWord, options);
-    expectedResult = {parsed: true, spineArray: [
+    expectedResult = {parsed: true, spineArray: [[
         {spineLetter: 's', index:1, pre:1, post:0},//is
         {spineLetter: 'l', index:5, pre:1, post:3},//alive
         {spineLetter: 'o', index:6, pre:1, post:4},//source
-        {spineLetter: 't', index:9, pre:1, post:4},//itches
-    ]};
+        {spineLetter: 't', index:8, pre:0, post:4},//their
+    ]]};
     assert.deepEqual(spineArray, expectedResult, '100% 1 loop');
+
+    //100% one loop 0 no parse
+    options.rule = "100";
+    spineArray = testFunc(sourceArray, 'slotq', options);
+    expectedResult = {parsed: false, spineArray: [[
+        {spineLetter: 's', index:1, pre:1, post:0},//is
+        {spineLetter: 'l', index:5, pre:1, post:3},//alive
+        {spineLetter: 'o', index:6, pre:1, post:4},//source
+        {spineLetter: 't', index:8, pre:0, post:4},//their
+    ]]};
+    assert.deepEqual(spineArray, expectedResult, '100% 1 loop unparseable');
+
+    //100% two loop
+    options.rule = "100";
+    options.spineLoops = 2;
+    spineArray = testFunc(sourceArray, spineWord, options);
+    expectedResult = {parsed: true, spineArray: [[
+        {spineLetter: 's', index:1, pre:1, post:0},//is
+        {spineLetter: 'l', index:5, pre:1, post:3},//alive
+        {spineLetter: 'o', index:6, pre:1, post:4},//source
+        {spineLetter: 't', index:8, pre:0, post:4}],//their
+        [{spineLetter: 's', index:12, pre:0, post:5},//summer
+        {spineLetter: 'l', index:13, pre:5, post:3},//nightlife
+        {spineLetter: 'o', index:14, pre:0, post:3},//over
+        {spineLetter: 't', index:8, pre:0, post:4},//their
+    ]]};
+    assert.deepEqual(spineArray, expectedResult, '100% 2 loops');
+
+
 
 });
 
