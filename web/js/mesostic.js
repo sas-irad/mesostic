@@ -294,8 +294,8 @@ window.mesostic = function() {
         var lines = resultObject.lines;
         for(var i = 0; i < lines.length; i++) {
             text = text + pad(lines[i]['preSpine'], 45, ' ', STR_PAD_LEFT);
-            text = text + lines[i]['spine'];
-            text = text + pad(lines[i]['postSpine'], 45, ' ', STR_PAD_LEFT);
+            text = text + '<span class="spine">' + lines[i]['spine'] + '</span>';
+            text = text + pad(lines[i]['postSpine'], 45, ' ', STR_PAD_RIGHT);
         }    
         return text;
     };
