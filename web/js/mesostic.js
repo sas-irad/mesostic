@@ -114,7 +114,7 @@ window.mesostic = function() {
                     found = true;
                 }
                 else if (rule === '50') {
-                    if (currentWord.indexOf(nextSpineLetter === -1)) {
+                    if (currentWord.indexOf(nextSpineLetter) === -1) {
                         currentSpineArray.push(success);
                         found = true;
                     }

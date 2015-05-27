@@ -2,10 +2,6 @@
  * Unit tests for mesostic function
  */
 
-
-QUnit.test('Startup Test', function(assert) {
-    assert.ok(1 == "1", "QUnit Started Up");
-});
 //#########################createSourceArray testing ##############
 QUnit.test( "createSourceArray", function( assert ) {
     var testFunc = mesostic._createSourceArray;
@@ -110,7 +106,7 @@ QUnit.test( "createSpineArray", function( assert ) {
     spineArray = testFunc(sourceArray, spineWord, options);
     expectedResult = {parsed: true, spineArray: [[
         {spineLetter: 's', index:1, pre:1, post:0},//is
-        {spineLetter: 'l', index:3, pre:0, post:5},//lovely
+        {spineLetter: 'l', index:4, pre:2, post:3},//silver
         {spineLetter: 'o', index:6, pre:1, post:4},//source
         {spineLetter: 't', index:8, pre:0, post:4},//their
     ]]};
@@ -137,6 +133,26 @@ QUnit.test( "createSpineArray", function( assert ) {
         {spineLetter: 't', index:8, pre:0, post:4},//their
     ]]};
     assert.deepEqual(spineArray, expectedResult, '100% 1 loop unparseable');
+
+    //50% three loop
+    options.rule = "50";
+    options.spineLoops = 3;
+    spineArray = testFunc(sourceArray, spineWord, options);
+    expectedResult = {parsed: true, spineArray: [
+        [{spineLetter: 's', index:1, pre:1, post:0},//is
+        {spineLetter: 'l', index:4, pre:2, post:3},//silver
+        {spineLetter: 'o', index:6, pre:1, post:4},//source
+        {spineLetter: 't', index:8, pre:0, post:4}],//their
+        [{spineLetter: 's', index:9, pre:5, post:0},//itches
+        {spineLetter: 'l', index:13, pre:5, post:3},//nightlife
+        {spineLetter: 'o', index:14, pre:0, post:3},//over
+        {spineLetter: 't', index:8, pre:0, post:4}],//their
+        [{spineLetter: 's', index:9, pre:5, post:0},//itches
+        {spineLetter: 'l', index:13, pre:5, post:3},//nightlife
+        {spineLetter: 'o', index:14, pre:0, post:3},//over
+        {spineLetter: 't', index:8, pre:0, post:4}],//their
+    ]};
+    assert.deepEqual(spineArray, expectedResult, '50% 3 loops');
 
     //100% two loop
     options.rule = "100";
