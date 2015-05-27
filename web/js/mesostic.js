@@ -102,11 +102,13 @@ window.mesostic = function() {
                 nextSpineLetter = spine[(i+1) % spineLength],
                 prevSpineLetter = spine[(i-1) % spineLength],
                 currentWord = sourceArray[j % sourceArray.length],
-                letterIndex = currentWord.indexOf(currentSpineLetter) ;
+                letterIndex = currentWord.indexOf(currentSpineLetter),
+                success;
 
             if (letterIndex > -1) { // Spine Letter is in there
-                var success = {'spineLetter': currentSpineLetter, 'index': j,
-                    'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)}
+                success = {'spineLetter': currentSpineLetter, 
+                    'index': j % sourceArray.length,
+                    'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)};
                 if (rule === 'basic') {
                     currentSpineArray.push(success);
                     found = true;
