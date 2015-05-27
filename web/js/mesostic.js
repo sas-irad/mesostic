@@ -93,13 +93,15 @@ window.mesostic = function() {
             resultArray = new Array(), // Only full spine words
             rule = options.rule || '50',
             loops = options.spineLoops || 1,
+            spineLetterCount = spineLength * loops,
             found = false,
             i = 0, // spine index
             j = 0; // source index
         
-        while (i < spineLength * loops) {
+        while (i < spineLetterCount) {
             var currentSpineLetter = spine[i % spineLength],
-                nextSpineLetter = spine[(i+1) % spineLength],
+                nextSpineLetter = i === spineLetterCount - 1 ? 
+                    undefined : spine[(i+1) % spineLength],
                 prevSpineLetter = spine[(i-1) % spineLength],
                 currentWord = sourceArray[j % sourceArray.length],
                 letterIndex = currentWord.indexOf(currentSpineLetter),
@@ -121,7 +123,9 @@ window.mesostic = function() {
                 }
                 else if (rule === '100') {
                     if (currentWord.indexOf(nextSpineLetter) === -1 && 
-                        currentWord.indexOf(prevSpineLetter) === -1) {
+                        currentWord.indexOf(prevSpineLetter) === -1 &&
+                       currentWord.indexOf(currentSpineLetter) ===
+                       currentWord.lastIndexOf(currentSpineLetter)) {
                             currentSpineArray.push(success);
                             found = true;
                     }
