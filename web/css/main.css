@@ -2,6 +2,36 @@ h1 {
     color: purple;
 }
 
+body {
+  margin: 0 auto 0 auto;
+  max-width: 800px;
+}
+
+.image-header {
+	width: 100%;
+	height: auto;
+}
+
+#sourcetext {
+	width: 60%;
+	height: 150px;
+}
+
+#spineword {
+	width: 60%;
+}
+
+.generatebuttonholder {
+	max-width: 200px;
+	width: 100%;
+	margin: 0 auto 0 auto;
+}
+
+.generatebutton {
+        max-width: 200px;
+        width: 100%;
+}
+
 .textfont {
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	font-weight:normal;
@@ -44,9 +74,6 @@ h1 {
 
 
 @media (min-width: 500px) and (max-width: 600px) {
-
-h1 {color: blue;
-	}
 
 
 }

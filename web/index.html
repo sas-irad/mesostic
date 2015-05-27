@@ -15,9 +15,9 @@
         <script src="js/vendor/pad.js"></script>
     </head>
     <body>
-        <h1 class="titlefont"><img src="images/john_cage.jpg" width="800" height="150" alt=""/></h1>
+        <h1 class="titlefont"><img class="image-header" src="images/john_cage.jpg" alt=""/></h1>
     <form id="mesosticForm">
-    <table width="800" border="0" cellspacing="0" cellpadding="0">
+    <table border="0" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
               <td><div align="right"><span class="textfont">spine word(s)?</span></div></td>
@@ -35,7 +35,7 @@
               <td><div align="right"><span class="textfont">source text?</span></div></td>
               <td>&nbsp;</td>
               <td><span class="textfont">
-                <textarea name="sourcetext" cols="72" rows="10" id="sourcetext">
+                <textarea name="sourcetext" id="sourcetext">
 John Milton Cage Jr. (September 5, 1912 – August 12, 1992) was an American composer, music theorist, writer, and artist. A pioneer of indeterminacy in music, electroacoustic music, and non-standard use of musical instruments, Cage was one of the leading figures of the post-war avant-garde. Critics have lauded him as one of the most influential American composers of the 20th century.[1][2][3][4] He was also instrumental in the development of modern dance, mostly through his association with choreographer Merce Cunningham, who was also Cage's romantic partner for most of their lives.[5][6]
 
 Cage is perhaps best known for his 1952 composition 4′33″, which is performed in the absence of deliberate sound; musicians who present the work do nothing aside from being present for the duration specified by the title. The content of the composition is not "four minutes and 33 seconds of silence," as is sometimes assumed, but rather the sounds of the environment heard by the audience during performance.[7][8] The work's challenge to assumed definitions about musicianship and musical experience made it a popular and controversial topic both in musicology and the broader aesthetics of art and performance. Cage was also a pioneer of the prepared piano (a piano with its sound altered by objects placed between or on its strings or hammers), for which he wrote numerous dance-related works and a few concert pieces. The best known of these is Sonatas and Interludes (1946–48).[9]
@@ -171,9 +171,10 @@ His teachers included the great Henry Cowell (1933) and Arnold Schoenberg (1933�
           </tbody>
     </table>
     </form>
-    <button onclick="doParse();">Parse</button>
-        <p class="textfont"><a href="about.html">about the project</a><br>
-<h1>Test</h1>
+<div class="generatebuttonholder">
+    <button class="generatebutton" onclick="doParse();">Generate</button>
+</div>        
+<p class="textfont"><a href="about.html">about the project</a><br>
 </p>
 <pre id="mesostic_content">
                                    let us maKe
