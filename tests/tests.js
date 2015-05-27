@@ -47,7 +47,7 @@ QUnit.test( "createSourceArray", function( assert ) {
     assert.deepEqual(sourceArray, expectedResult, 'strip punctuation');
 
     //Try leaving in an apostrophe
-    expectedResult = ['Here', 'is', 'Bob\'s', 'text'];
+    expectedResult = ['here', 'is', 'bob\'s', 'text'];
     sourceText = 'Here is Bob\'s text!';
     sourceArray= testFunc(sourceText, options);
     assert.deepEqual(sourceArray, expectedResult, 'leave an apostrophe');
