@@ -170,7 +170,33 @@ QUnit.test( "createSpineArray", function( assert ) {
     ]]};
     assert.deepEqual(spineArray, expectedResult, '100% 2 loops');
 
+    // Test behavior with double-letters in a word, spine wrapping
+    spineWord = 'flu';
+    sourceArray = [
+        'forget', // 'f' for both
+        'lovely', // 'l' for 50
+        'lazy', // 'l' for 100
+        'fun' // 'u' for both
+    ];
 
+    options.rule = "50";
+    options.spineLoops = 1;
+    spineArray = testFunc(sourceArray, spineWord, options);
+    expectedResult = {parsed: true, spineArray: [[
+        {spineLetter: 'f', index:0, pre:0, post:5},// forget
+        {spineLetter: 'l', index:1, pre:0, post:5},// lovely
+        {spineLetter: 'u', index:3, pre:1, post:1},// fun
+    ]]};
+    assert.deepEqual(spineArray, expectedResult, '50% double spine letter');
+
+    options.rule = "100";
+    spineArray = testFunc(sourceArray, spineWord, options);
+    expectedResult = {parsed: true, spineArray: [[
+        {spineLetter: 'f', index:0, pre:0, post:5},// forget
+        {spineLetter: 'l', index:2, pre:0, post:3},// lazy 
+        {spineLetter: 'u', index:3, pre:1, post:1},// fun
+    ]]};
+    assert.deepEqual(spineArray, expectedResult, '100% double spine letter');
 
 });
 
