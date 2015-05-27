@@ -106,7 +106,8 @@ window.mesostic = function() {
                 success;
 
             if (letterIndex > -1) { // Spine Letter is in there
-                success = {'spineLetter': currentSpineLetter, 'index': j,
+                success = {'spineLetter': currentSpineLetter, 
+                    'index': j % sourceArray.length,
                     'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)};
                 if (rule === 'basic') {
                     currentSpineArray.push(success);
