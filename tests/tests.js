@@ -82,7 +82,8 @@ QUnit.test( "createSpineArray", function( assert ) {
         'a',          //2
         'lovely',     //3 first 'l' for basic and 50, throw out for 100
         'silver',     //4 throw out for 100
-        'source',     //6 'l' for 100
+        'alive',      //5 'l' for 100
+        'source',     //6 'o' for basic, 50, 100
         'array',      //7
         'their',      //8 't' for basic, 50
         'itches',     //9 
