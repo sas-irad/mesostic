@@ -6,7 +6,7 @@ The purpose of this project is to replicate in javascript the functionality of a
 
 ## Project Participants
 - Clare Din ( [claredin](https://github.com/claredin) )
-- Andrew Jennings
+- Andrew Jennings ( [andrewjennings](https://github.com/andrewjennings) )
 - Brian Kirk
 - Chris Martin
 - J. Reuben Wetherbee ( [jrweth](http://github.com/jrweth) )
