@@ -168,61 +168,106 @@ window.mesostic = function() {
      * };
      */
     function parseLineWords( spineArraySlot1, spineArraySlot2, spineArray, sourceArray, options) {
-
+        var startSpineLetter, preLineBreak, postLineBreak, endSpineLetter;
+        
 
         if (spineArraySlot1 == null)  // first letter in spine array
         {
             // no splitbreak between null letter and first letter
-
-            startBookend = '';
-            preLineBreak = '';
-            // no line break
+            var endSpine = spineArray[spineArraySlot2];
+            var endWord = sourceArray[endSpine.index];
             
-            endBookend = spineArray[spineArraySlot2].spineLetter;
-            postLineBreak = sourceArray[ spineArray[spineArraySlot2].index ];  // need to chop here based on pre/post
+            startSpineLetter = '';
+            preLineBreak = '';
 
+            // no line break
+            postLineBreak = endWord.substr(0,endSpine.pre) ;  // need to chop here based on pre/post
+            endSpineLetter = endSpine.spineLetter;
             count = 0;
             count = count + spineArray[spineArraySlot2].pre;
 
             // start the walk back to null
             for ($i = spineArray[spineArraySlot2].index-1; $i >= 0; $i--) {
 
-                if ( sourceArray[i].length + count <= 45) {
+                var word = sourceArray[$i];
 
-                    // need to check for 0/50/100 rule
-                    
-                    if (getRandomBoolean()) {
-                        postLineBreak = sourceArray[i] + postLineBreak;
-                    }
+                console.log(word);
+                //check if the word is too long
+                if(postLineBreak.length + word.length + 1 >= 45) continue;
 
+                // need to check for 0/50/100 rule
+                if (options.rule === 'basic') {}
+                else if(options.rule === '50' || options.rule === '100') {
+                    if(word.indexOf(endSpineLetter) >= 0) continue;
+                } 
 
-                }
+                if (getRandomBoolean(options) === false) continue;
 
+                postLineBreak = word + ' ' + postLineBreak;
 
             }
         }
-        else if (spineArraySlot2 == null)  // last letter in spine array
+        else if (spineArraySlot2 === null)  // last letter in spine array
         {
 	    // no splitbreak between last letter and null letter
 
+            // no splitbreak between null letter and first letter
+            var startSpine = spineArray[spineArraySlot1];
+            var startWord = sourceArray[startSpine.index];
+            
+            endSpineLetter = '';
+            postLineBreak = '';
+
+            // no line break
+            preLineBreak = startWord.substr(startSpine.pre + 1) ;  // need to chop here based on pre/post
+            startSpineLetter = startSpine.spineLetter;
+
+            // start the walk back to null
+            for ($i = spineArray[spineArraySlot1].index+1; $i < sourceArray.length; $i++) {
 
 
+                var word = sourceArray[$i];
+                console.log(word);
+                //check if the word is too long
+                if(preLineBreak.length + word.length + 1 >= 45) continue;
+
+                // need to check for 0/50/100 rule
+                if (options.rule === 'basic' || options.rule === '50') {}
+                else if(options.rule === '100') {
+                    if(word.indexOf(startSpineLetter) >= 0) continue;
+                } 
+
+                if (getRandomBoolean(options) === false) continue;
+
+                preLineBreak += ' ' + word;
+
+            }
         }
         else  // everything in between
         {
-            // get the random splitbreak between slots in the spine array
-            var split = getRandomSplit( spineArray[spineArraySlot1].index, spineArray[spineArraySlot2].index );
+            // no splitbreak between null letter and first letter
+            var endSpine = spineArray[spineArraySlot2];
+            var endWord = sourceArray[endSpine.index];
+            var startSpine = spineArray[spineArraySlot1];
+            var startWord = sourceArray[startSpine.index];
             
+            startSpineLetter = '';
+            preLineBreak = '';
 
+            postLineBreak = endWord.substr(0,endSpine.pre) ;  // need to chop here based on pre/post
+            endSpineLetter = endSpine.spineLetter;
+
+            preLineBreak = startWord.substr(startSpine.pre + 1) ;  // need to chop here based on pre/post
+            startSpineLetter = startSpine.spineLetter;
         }
 
 
         return {
-            'startSpineLetter': 'J',
-            'preLineBreak': 'ohn Burbank',
+            'startSpineLetter': startSpineLetter,
+            'preLineBreak': preLineBreak,
             //the line break of display poem    
-            'postLineBreak': 'in the castl',
-            'endSpineLetter': 'E'
+            'postLineBreak': postLineBreak,
+            'endSpineLetter': endSpineLetter
         };
     }
 
