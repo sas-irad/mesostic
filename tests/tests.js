@@ -192,10 +192,20 @@ QUnit.test('parseLineWords', function(assert) {
         wingTextSparsity: "normal"       
     };
 
+    parsed = testFunc(null,0, spineArray, sourceArray, options);
+    assert.equal(parsed.startSpineLetter,'', 'check empty start spine letter'); 
+    console.log(parsed);
+
+    parsed = testFunc(3, null, spineArray, sourceArray, options);
+    assert.equal(parsed.endSpineLetter,'', 'check empty end spine letter'); 
+    console.log(parsed);    
+    
     parsed = testFunc(2,3,spineArray, sourceArray, options);
-    assert.equal(parsed.startSpineLetter, 'O','check start spine letter');
-    assert.equal(parsed.endSpineLetter, 'T', 'check end spine letter');
+    assert.equal(parsed.startSpineLetter, 'o','check start spine letter');
+    assert.equal(parsed.endSpineLetter, 't', 'check end spine letter');
     assert.equal(parsed.preLineBreak.substr(0,4), 'urce', 'check preline break');
 
-    assert.equal(parsed.postLineBreak.substr(parsed.postLineBreak.length - 2), 'ra', 'check postline break');
+    assert.equal(parsed.postLineBreak.substr(parsed.postLineBreak.length - 2), 'i', 'check postline break');
 });
+
+
