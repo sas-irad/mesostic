@@ -23,7 +23,7 @@
               <td><div align="right"><span class="textfont">spine word(s)?</span></div></td>
               <td>&nbsp;</td>
               <td><span class="textfont">
-                <input name="spineword" type="text" id="spineword" size="72" value="John Cage">
+                <input name="spineword" type="text" id="spineword" value="John Cage">
               </span></td>
             </tr>
             <tr>
@@ -52,7 +52,7 @@ His teachers included the great Henry Cowell (1933) and Arnold Schoenberg (1933â
             <tr>
               <td><div align="right"><span class="textfont">number of mesostics?</span></div></td>
               <td>&nbsp;</td>
-              <td><input name="number_mesostics" type="text" id="number_mesostics" value="1" size="5" maxlength="5"></td>
+              <td><input name="number_mesostics" type="text" id="number_mesostics" value="1" size="4" maxlength="2"></td>
             </tr>
             <tr>
               <td class="textfont">&nbsp;</td>
@@ -115,7 +115,7 @@ His teachers included the great Henry Cowell (1933) and Arnold Schoenberg (1933â
                       <td width="120"><input name="sparse_wing_text" type="radio" id="radio5" value="normal" checked>
                       <span class="textfont">normal</span></td>
                       <td width="10">&nbsp;</td>
-                      <td><span class="purpletextfont">Note: Sparse wing text is the number of words between the spine words.</span></td>
+                      <td><span class="purpletextfont">Note: The more sparse the wing text, the less likely additional words will be included.</span></td>
                     </tr>
                     <tr>
                       <td width="120"><input type="radio" name="sparse_wing_text" id="radio6" value="sparse">
@@ -152,13 +152,14 @@ His teachers included the great Henry Cowell (1933) and Arnold Schoenberg (1933â
                       <td width="120"><input name="mesostic_rule" type="radio" id="radio3" value="50" checked>
                       <label for="mesostic_rule3" class="textfont">50% rule</label></td>
                       <td width="10">&nbsp;</td>
+		      <td><span class="purpletextfont">Note: The 50% rule does not permit the second spine letter to appear between spine letters.</span></td>
                       <td>&nbsp;</td>
                     </tr>
                     <tr>
                       <td width="120"><input type="radio" name="mesostic_rule" id="radio4" value="100">
                       <label for="mesostic_rule2" class="textfont">100% rule</label></td>
                       <td width="10">&nbsp;</td>
-                      <td><span class="purpletextfont">Note: If you choose the 100% rule, you will be discarding a lot of words.</span></td>
+                      <td><span class="purpletextfont">Note: The 100% rule does not permit either spine letter to appear between spine letters.</span></td>
                     </tr>
                   </tbody>
               </table></td>
