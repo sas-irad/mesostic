@@ -60,7 +60,10 @@ window.mesostic = function() {
             returnWord;
         for (var i = 0, len = sourceArray.length; i < len; i++) {
             returnWord = sourceArray[i].toLowerCase().trim();
-            if (returnWord.length > 0) {
+            if (returnWord.length > 0) {  // No empty words
+                if (options.stripPunctuation === true) {
+                    returnWord = returnWord.replace(/[^a-z0-9']/g,'');
+                }
                 returnArray.push(returnWord);
             }
         }
