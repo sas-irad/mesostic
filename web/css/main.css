@@ -1,3 +1,5 @@
+@media (min-width: 500px) {
+
 h1 {
     color: purple
 }
@@ -41,3 +43,7 @@ h1 {
     font-size: 20px;
     font-weight: bold;
 }
+
+
+}
+
