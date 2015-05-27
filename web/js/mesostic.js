@@ -55,8 +55,16 @@ window.mesostic = function() {
      * @TODO Make sure double spaces " " get stripped out
      */
     function createSourceArray(sourceText, options) {
-        var sourceArray = sourceText.split(" ");
-        return sourceArray;
+        var sourceArray = sourceText.split(/\s+/),
+            returnArray = new Array(),
+            returnWord;
+        for (var i = 0, len = sourceArray.length; i < len; i++) {
+            returnWord = sourceArray[i].toLowerCase().trim();
+            if (returnWord.length > 0) {
+                returnArray.push(returnWord);
+            }
+        }
+        return returnArray;
     }
 
     /**
