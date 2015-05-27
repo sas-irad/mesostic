@@ -32,17 +32,17 @@ QUnit.test( "createSourceArray", function( assert ) {
     assert.deepEqual(sourceArray, expectedResult, 'ignore double spaces');
     
     //test some line breaks
-    sourceText = 'Here\nis the \n text\n\nsource\n';
+    sourceText = 'Here\nis the \n source\n\ntext\n';
     sourceArray = testFunc(sourceText, options);
     assert.deepEqual(sourceArray, expectedResult, 'ignore line breaks');
     
     //test some tabs
-    sourceText = '\tHere\tis the \t text\n\t\nsource\n';
+    sourceText = '\tHere\tis the \t source\n\t\ntext\n';
     sourceArray = testFunc(sourceText, options);
     assert.deepEqual(sourceArray, expectedResult, 'ignore tabs');
     
     //test some punctuation
-    sourceText = 'Here! is. the?  text "source"';
+    sourceText = 'Here! is. the?  source "text"';
     sourceArray = testFunc(sourceText, options);
     assert.deepEqual(sourceArray, expectedResult, 'strip punctuation');
 
