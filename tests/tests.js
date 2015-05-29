@@ -248,7 +248,7 @@ QUnit.test('parseLineWords', function(assert) {
     assert.equal(parsed.endSpineLetter, 't', 'check end spine letter');
     assert.equal(parsed.preLineBreak.substr(0,4), 'urce', 'check preline break');
 
-    assert.equal(parsed.postLineBreak.substr(parsed.postLineBreak.length - 2), 'i', 'check postline break');
+    assert.equal(parsed.postLineBreak.substr(parsed.postLineBreak.length - 1), 'i', 'check postline break');
 });
 
 

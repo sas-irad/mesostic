@@ -209,9 +209,8 @@ His teachers included the great Henry Cowell (1933) and Arnold Schoenberg (1933â
                 stanzaBreaks: getRadioVal('stanzas_break'),
                 wingTextSparsity: getRadioVal('sparse_wing_text')
             };
-            console.log(options);
             var result = mesostic.parse(spineWords, sourceText, options);
-            document.getElementById('mesostic_content').innerHTML = mesostic.formatText(result);
+            document.getElementById('mesostic_content').innerHTML = mesostic.formatText(result, spineWords, options);
             return result;
         }
     </script>

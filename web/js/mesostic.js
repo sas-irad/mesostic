@@ -185,96 +185,94 @@ window.mesostic = function() {
             endSpineLetter,
             endWord,
             startWord,
-            word;
+            word,
+            preBreakSearchUntil,
+            postBreakSearchAfter,
+            partialSpineWord;
         
 
-        if (startSpine === null)  // first letter in spine array
+        if (startSpine === null)  // looking for start of first Spine Letter Line
         {
             // no splitbreak between null letter and first letter
             endWord = sourceArray[endSpine.index];
-            console.log(endWord);
-            console.log(endSpine);
             startSpineLetter = '';
             preLineBreak = '';
+            endSpineLetter = endSpine.spineLetter;
 
             // no line break
-            postLineBreak = endWord.substr(0,endSpine.pre) ;  // need to chop here based on pre/post
-            endSpineLetter = endSpine.spineLetter;
-            count = 0;
-            count = count + endSpine.pre;
+            partialSpineWord = endWord.substr(0,endSpine.pre) ;  
 
+            if (options.rule === 'basic') {
+                letterRestrictions = new Array();
+            }
+            else if(options.rule === '50' || options.rule === '100') {
+                letterRestrictions = new Array(endSpineLetter);
+            } 
             // start the walk back to null
-            for ($i = endSpine.index-1; $i >= 0; $i--) {
-
-                var word = sourceArray[$i];
-
-                console.log(word);
-                //check if the word is too long
-                if(postLineBreak.length + word.length + 1 >= 45) continue;
-
-                // need to check for 0/50/100 rule
-                if (options.rule === 'basic') {}
-                else if(options.rule === '50' || options.rule === '100') {
-                    if(word.indexOf(endSpineLetter) >= 0) continue;
-                } 
-
-                if (getRandomBoolean(options) === false) continue;
-
-                postLineBreak = word + ' ' + postLineBreak;
-
+            if(endSpine.index === 0) {
+                postLineBreak = partialSpineWord;
+            }
+            else {
+                postLineBreak = selectWingWords(endSpine.index,0, partialSpineWord, letterRestrictions, sourceArray, options);
             }
         }
-        else if (endSpine === null)  // last letter in spine array
+        else if (endSpine === null)  // looking for ending of last Spine Letter line
         {
-	    // no splitbreak between last letter and null letter
-
             // no splitbreak between null letter and first letter
             startWord = sourceArray[startSpine.index];
-            
             endSpineLetter = '';
             postLineBreak = '';
-
-            // no line break
-            preLineBreak = startWord.substr(startSpine.pre + 1) ;  // need to chop here based on pre/post
             startSpineLetter = startSpine.spineLetter;
 
-            // start the walk back to null
-            for ($i = startSpine.index+1; $i < sourceArray.length; $i++) {
+            partialSpineWord = startWord.substr(startSpine.pre+1) ;  
 
-
-                word = sourceArray[$i];
-                
-                //check if the word is too long
-                if(preLineBreak.length + word.length + 1 >= 45) continue;
-
-                // need to check for 0/50/100 rule
-                if (options.rule === 'basic' || options.rule === '50') {}
-                else if(options.rule === '100') {
-                    if(word.indexOf(startSpineLetter) >= 0) continue;
-                } 
-
-                if (getRandomBoolean(options) === false) continue;
-
-                preLineBreak += ' ' + word;
-
+            if (options.rule === 'basic' || options.rule === '50') {
+                letterRestrictions = new Array();
             }
+            else if(options.rule === '100') {
+                letterRestrictions = new Array(startSpineLetter);
+            }
+
+            preLineBreak = selectWingWords(startSpine.index,sourceArray.length, partialSpineWord, letterRestrictions, sourceArray, options);
+
         }
-        else  // everything in between
+        else  //looking for words between two spine letters 
         {
             // no splitbreak between null letter and first letter
             endWord = sourceArray[endSpine.index];
-            startWord = sourceArray[startSpine.index];
-            
-            startSpineLetter = '';
-            preLineBreak = '';
-
-            postLineBreak = endWord.substr(0,endSpine.pre) ;  // need to chop here based on pre/post
             endSpineLetter = endSpine.spineLetter;
-
-            preLineBreak = startWord.substr(startSpine.pre + 1) ;  // need to chop here based on pre/post
+            startWord = sourceArray[startSpine.index];
             startSpineLetter = startSpine.spineLetter;
-        }
 
+            if (options.rule === 'basic') {
+                letterRestrictions = new Array();
+            }
+            else if (options.rule === '50') {
+                letterRestrictions = new Array(endSpineLetter);
+            }
+            else if(options.rule === '100') {
+                letterRestrictions = new Array(endSpineLetter, startSpineLetter);
+            }
+
+            //get the midpoint between the two words to determine which goes on which lines
+            //we have looped back to beginning of source text between spine Words
+            if (startSpine.index >= endSpine.index) {
+                preBreakSearchUntil = sourceArray.length, //look until the end of the text
+                postBreakSearchAfter = -1 // look 
+            }
+            else {
+                preBreakSearchUntil = getRandomMidpoint(startSpine.index, endSpine.index);
+                postBreakSearchAfter = preBreakSearchUntil - 1;
+            }
+            //find the end of first line
+            partialSpineWord = startWord.substr(startSpine.pre+1) ;  
+            preLineBreak = selectWingWords(startSpine.index, preBreakSearchUntil, partialSpineWord, letterRestrictions, sourceArray, options);
+            
+            //find the beginning of the second line
+            partialSpineWord = endWord.substr(0,endSpine.pre) ;  // need to chop here based on pre/post
+            postLineBreak = selectWingWords(endSpine.index, postBreakSearchAfter, partialSpineWord, letterRestrictions, sourceArray, options);
+        }
+    
 
         return {
             'startSpineLetter': startSpineLetter,
@@ -285,6 +283,54 @@ window.mesostic = function() {
         };
     }
 
+    /**
+     * Function to select random words between the two given indexes of the source
+     */
+    function selectWingWords(searchStartIndex, searchEndIndex, spineWordPart, letterRestrictions, sourceArray, options)
+    {
+        var maxLength = 45;
+        var increment = searchStartIndex < searchEndIndex ? 1 : -1;
+        var i;
+        var words = spineWordPart;
+        var word;
+
+        var j = 0;
+        wordLoop:
+        for(
+            i = searchStartIndex + increment;
+            i !== searchEndIndex && i >= 0 && i < sourceArray.length;
+            i = i + increment
+        ) {
+            word = sourceArray[i];
+            //make sure word doesn't make line part too long
+            if(words.length + word.length + 1 >= maxLength) continue wordLoop;
+
+            // need to check for letterRestrictions
+            for(j = 0; j < letterRestrictions.length; j++) {
+                if(word.indexOf(letterRestrictions[j]) >= 0) continue wordLoop;
+            } 
+
+            if (getRandomBoolean(options) === false) continue wordLoop;
+
+            if(increment === 1) {
+                words = words + ' ' + word;
+            }
+            else if(increment === -1) {
+                words = word + ' ' + words;
+            }
+            //just in case, stop after 100 words 
+            if (j++ > 100) return words;
+        }
+
+        return words;
+    } 
+    
+
+    function getRandomMidpoint(min,max)
+    {
+        min = min + 1; //we don't want the min returned
+        return Math.floor(Math.random()*(max-min+1)+min);
+    }
 
     /**
      * Function which uses the the spineArray and sourceArray to create the actual lines of the poem
@@ -316,7 +362,6 @@ window.mesostic = function() {
         //end with null
         spineLetters.push(null);
 
-        console.log(spineLetters);
         previousPostLineBreak = '';
         for(i = 0; i < spineLetters.length -1; i++) {
 
@@ -335,8 +380,21 @@ window.mesostic = function() {
         return lines;
     }
 
-    function getRandomBoolean() {
-        return true;
+    function getRandomBoolean(options) {
+        var oneChanceIn;
+
+        switch(options.wingTextSparsity) {
+            case  "very sparse":
+                oneChanceIn = 8;
+                break;
+            case  "sparse": //1 in 4 chance
+                oneChanceIn = 4;
+                break;   
+            case  "normal": //1 in 2 chance
+            default:
+                oneChanceIn = 2;
+        }
+        return 0 === Math.floor(Math.random() * oneChanceIn);
     }
 
     function getRandomSplit(index1, index2) {
@@ -362,14 +420,24 @@ window.mesostic = function() {
     };
 
     //function to return actual text of the poem
-    pub.formatText = function(resultObject, formatType) {
-        console.log(resultObject.lines);
+    pub.formatText = function(resultObject, spineWords, options) {
         var text = '';
         var lines = resultObject.lines;
+        var spineLength = createSpine(spineWords).length;
+        var stanzaBreak;;
         for(var i = 0; i < lines.length; i++) {
             text = text + pad(lines[i]['preSpine'], 45, ' ', STR_PAD_LEFT);
             text = text + '<span class="spine">' + lines[i]['spine'] + '</span>';
             text = text + lines[i]['postSpine'] + '<br>';
+            
+            stanzaBreak = false;
+            if (options.stanzaBreaks == 'spineWord' && i % spineLength === 0) {
+                stanzaBreak = true;
+            }
+            else if(options.stanzaBreaks == 'random' && 0 === Math.floor(Math.random() * 6)) {
+                stanzaBreak = true;
+            }
+            if(stanzaBreak) text = text + '<br><br>';
         }    
         return text;
     };
