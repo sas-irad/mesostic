@@ -75,7 +75,7 @@ window.mesostic = function() {
      */
     function createSpine(spineWord, options)
     {
-        return spineWord.replace(/[^A-Za-z]/g,'');
+        return spineWord.replace(/[^A-Za-z]/g,'').toLowerCase();
 
     }    
     /**
@@ -143,7 +143,12 @@ window.mesostic = function() {
 
             //give up after 10 tries through the source text if you haven't found one yet 
             if (j > sourceArray.length * 10 && resultArray.length == 0) {
-                return {parsed: false, spineArray: new Array(currentSpineArray)};
+                if(currentSpineArray.length > 0 ) {
+                    return {parsed: false, spineArray: new Array(currentSpineArray)};
+                }
+                else {
+                    return {parsed: false, spineArray: new Array()};
+                }
             }
         }
         return {
@@ -173,16 +178,22 @@ window.mesostic = function() {
      *     'endSpineLetter': 'E'
      * };
      */
-    function parseLineWords( spineArraySlot1, spineArraySlot2, spineArray, sourceArray, options) {
-        var startSpineLetter, preLineBreak, postLineBreak, endSpineLetter;
+    function parseLineWords( startSpine, endSpine, sourceArray, options) {
+        var startSpineLetter,
+            preLineBreak,
+            postLineBreak,
+            endSpineLetter,
+            endWord,
+            startWord,
+            word;
         
 
-        if (spineArraySlot1 == null)  // first letter in spine array
+        if (startSpine === null)  // first letter in spine array
         {
             // no splitbreak between null letter and first letter
-            var endSpine = spineArray[spineArraySlot2];
-            var endWord = sourceArray[endSpine.index];
-            
+            endWord = sourceArray[endSpine.index];
+            console.log(endWord);
+            console.log(endSpine);
             startSpineLetter = '';
             preLineBreak = '';
 
@@ -190,10 +201,10 @@ window.mesostic = function() {
             postLineBreak = endWord.substr(0,endSpine.pre) ;  // need to chop here based on pre/post
             endSpineLetter = endSpine.spineLetter;
             count = 0;
-            count = count + spineArray[spineArraySlot2].pre;
+            count = count + endSpine.pre;
 
             // start the walk back to null
-            for ($i = spineArray[spineArraySlot2].index-1; $i >= 0; $i--) {
+            for ($i = endSpine.index-1; $i >= 0; $i--) {
 
                 var word = sourceArray[$i];
 
@@ -213,13 +224,12 @@ window.mesostic = function() {
 
             }
         }
-        else if (spineArraySlot2 === null)  // last letter in spine array
+        else if (endSpine === null)  // last letter in spine array
         {
 	    // no splitbreak between last letter and null letter
 
             // no splitbreak between null letter and first letter
-            var startSpine = spineArray[spineArraySlot1];
-            var startWord = sourceArray[startSpine.index];
+            startWord = sourceArray[startSpine.index];
             
             endSpineLetter = '';
             postLineBreak = '';
@@ -229,11 +239,11 @@ window.mesostic = function() {
             startSpineLetter = startSpine.spineLetter;
 
             // start the walk back to null
-            for ($i = spineArray[spineArraySlot1].index+1; $i < sourceArray.length; $i++) {
+            for ($i = startSpine.index+1; $i < sourceArray.length; $i++) {
 
 
-                var word = sourceArray[$i];
-                console.log(word);
+                word = sourceArray[$i];
+                
                 //check if the word is too long
                 if(preLineBreak.length + word.length + 1 >= 45) continue;
 
@@ -252,10 +262,8 @@ window.mesostic = function() {
         else  // everything in between
         {
             // no splitbreak between null letter and first letter
-            var endSpine = spineArray[spineArraySlot2];
-            var endWord = sourceArray[endSpine.index];
-            var startSpine = spineArray[spineArraySlot1];
-            var startWord = sourceArray[startSpine.index];
+            endWord = sourceArray[endSpine.index];
+            startWord = sourceArray[startSpine.index];
             
             startSpineLetter = '';
             preLineBreak = '';
@@ -292,34 +300,37 @@ window.mesostic = function() {
         var previousPostLineBreak; //the postLineBreak text retrieved from previous parsed words
         var lines = [];
         var parsedWords;
+        var i,j;
+
         
-	    //special case - first element of spineArray
-        parsedWords = parseLineWords(null, 0, spineArray, sourceArray, options);
-	    previousPostLineBreak = parsedWords.postLineBreak;
-        
-	    // loop through each spine letter and get corresponding line
-        for(var i = 0; i < spineArray.length-1; i++) {
-            
-            //find the words between this spine letter and the next
-            parsedWords = parseLineWords(i, i+1, spineArray, sourceArray, options);
+        //create a single dimensional array to loop through spine letters
+        //start with null
+        var spineLetters = new Array(null);
+	    // loop through each spine word(s)
+        for(i = 0; i < spineArray.length; i++) {
+            //loop through each spine letter
+            for(j = 0; j < spineArray[i].length; j++) {
+                spineLetters.push(spineArray[i][j]);
+            }
+        }
+        //end with null
+        spineLetters.push(null);
+
+        console.log(spineLetters);
+        previousPostLineBreak = '';
+        for(i = 0; i < spineLetters.length -1; i++) {
+
+                //find the words between this spine letter and the next
+            parsedWords = parseLineWords(spineLetters[i], spineLetters[i+1], sourceArray, options);
 
             lines.push({
                 preSpine: previousPostLineBreak,
                 spine: parsedWords.startSpineLetter,
-                postSpine: prasedWords.preLineBreak
+                postSpine: parsedWords.preLineBreak
             });
 
             previousPostLineBreak = parsedWords.postLineBreak;
         }
-
-	    // special case - last element of spineArray
-	    parsedWords = parseLineWords(spineArray.length-1, null, spineArray, sourceArray, options)
-        lines.push({
-            preSpine: previousPostLineBreak,
-            spine: parsedWords.startSpineLetter,
-            postSpine: parsedWords.preLineBreak 
-        });
-
 
         return lines;
     }
@@ -352,12 +363,13 @@ window.mesostic = function() {
 
     //function to return actual text of the poem
     pub.formatText = function(resultObject, formatType) {
+        console.log(resultObject.lines);
         var text = '';
         var lines = resultObject.lines;
         for(var i = 0; i < lines.length; i++) {
             text = text + pad(lines[i]['preSpine'], 45, ' ', STR_PAD_LEFT);
             text = text + '<span class="spine">' + lines[i]['spine'] + '</span>';
-            text = text + pad(lines[i]['postSpine'], 45, ' ', STR_PAD_RIGHT);
+            text = text + lines[i]['postSpine'] + '<br>';
         }    
         return text;
     };
