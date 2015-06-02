@@ -414,7 +414,12 @@ window.mesostic = function() {
         var resultObject = {parsed: parsing.parsed};
 
         //create and return ResultObject
-        resultObject.lines = createLines(parsing.spineArray, sourceArray, options);
+        if(parsing.spineArray.length > 0) {
+            resultObject.lines = createLines(parsing.spineArray, sourceArray, options);
+        }
+        else {
+            resultObject.lines = new Array();
+        }
         return resultObject;
 
     };

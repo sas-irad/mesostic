@@ -29,9 +29,20 @@ body {
 
 .generatebutton {
         max-width: 200px;
-        width: 100%;
+        width: 50%;
+        float: left;
 }
 
+.clearbutton {
+        max-width: 200px;
+        width: 50%;
+}
+
+.warning {
+
+    color: red;
+    font-decoration: italic;
+}
 .textfont {
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	font-weight:normal;

@@ -16,6 +16,14 @@
     </head>
     <body>
         <h1 class="titlefont"><img class="image-header" src="images/john_cage.jpg" alt=""/></h1>
+    <p class="textfont"><a href="about.html">about the project</a><br>
+    <div class="generatebuttonholder">
+        <button class="generatebutton" onclick="doParse();">Generate</button>
+        <button class="clearbutton" onclick="document.getElementById('mesostic_content').innerHTML = '';">Clear</button>
+    </div>        
+    </p>
+    <pre id="mesostic_content">
+    </pre>
     <form id="mesosticForm">
     <table border="0" cellspacing="0" cellpadding="0">
           <tbody>
@@ -168,13 +176,6 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
           </tbody>
     </table>
     </form>
-<div class="generatebuttonholder">
-    <button class="generatebutton" onclick="doParse();">Generate</button>
-</div>        
-<p class="textfont"><a href="about.html">about the project</a><br>
-</p>
-<pre id="mesostic_content">
-</pre>
 
     </body>
     <script type="text/javascript">
@@ -204,7 +205,14 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
                 wingTextSparsity: getRadioVal('sparse_wing_text')
             };
             var result = mesostic.parse(spineWords, sourceText, options);
-            document.getElementById('mesostic_content').innerHTML = mesostic.formatText(result, spineWords, options);
+            var text = mesostic.formatText(result, spineWords, options);
+            if(result.parsed) {
+                document.getElementById('mesostic_content').innerHTML = text;
+            }
+            else {
+                document.getElementById('mesostic_content').innerHTML = '<span class="warning">Unable to find match for complete spine word(s) in source text with the current settings</span> <br>' + text;
+            }
+
             return result;
         }
     </script>
