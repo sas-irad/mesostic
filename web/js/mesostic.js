@@ -429,15 +429,34 @@ window.mesostic = function() {
         var text = '';
         var lines = resultObject.lines;
         var spineLength = createSpine(spineWords).length;
-        var stanzaBreak;;
+        var stanzaBreak;
+        
+        //find where the spaces are in the spine word
+        if (options.stanzaBreaks === 'spineWord') {
+            var modifiedSpineWords = spineWords.replace(/[^A-Za-z ]/g,'').toLowerCase().trim();
+            var breakIndexes = [];
+            for(var i = 0; i<modifiedSpineWords.length; i++) {
+               if (modifiedSpineWords[i] === ' ') breakIndexes.push(i - breakIndexes.length);
+            }
+            breakIndexes.push(0);
+            console.log(breakIndexes);
+        }
+
+        
         for(var i = 0; i < lines.length; i++) {
             text = text + pad(lines[i]['preSpine'], 45, ' ', STR_PAD_LEFT);
             text = text + '<span class="spine">' + lines[i]['spine'] + '</span>';
             text = text + lines[i]['postSpine'] + '<br>';
             
             stanzaBreak = false;
-            if (options.stanzaBreaks == 'spineWord' && i % spineLength === 0) {
-                stanzaBreak = true;
+            if (options.stanzaBreaks == 'spineWord') {
+                //if not for ie < 9 we could use indexOf here to see if 
+                for(j = 0; j < breakIndexes.length; j++) {
+                    if(i> 0 && breakIndexes[j] == i % spineLength) {
+                        stanzaBreak = true;
+                        break;
+                    }
+                }
             }
             else if(options.stanzaBreaks == 'random' && 0 === Math.floor(Math.random() * 6)) {
                 stanzaBreak = true;
