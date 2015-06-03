@@ -290,27 +290,34 @@ window.mesostic = function() {
     {
         var maxLength = 45;
         var increment = searchStartIndex < searchEndIndex ? 1 : -1;
-        var i;
+        var i,j;
         var words = spineWordPart;
         var word;
-
-        var j = 0;
+        var eligibleWords = [];
+        
+        //find the words that are eligible
         wordLoop:
         for(
             i = searchStartIndex + increment;
             i !== searchEndIndex && i >= 0 && i < sourceArray.length;
             i = i + increment
-        ) {
+        ) {     
             word = sourceArray[i];
-            //make sure word doesn't make line part too long
-            if(words.length + word.length + 1 >= maxLength) continue wordLoop;
-
             // need to check for letterRestrictions
             for(j = 0; j < letterRestrictions.length; j++) {
                 if(word.indexOf(letterRestrictions[j]) >= 0) continue wordLoop;
             } 
+            eligibleWords.push(word);
+        }        
+        
+        
+        for(i = 0; i < eligibleWords.length; i++) {
+            word = eligibleWords[i];
+            
+            //make sure word doesn't make line part too long
+            if(words.length + word.length + 1 >= maxLength) continue;
 
-            if (getRandomBoolean(options) === false) continue wordLoop;
+            if (getRandomBoolean(options, eligibleWords.length) === false) continue;
 
             if(increment === 1) {
                 words = words + ' ' + word;
@@ -319,7 +326,7 @@ window.mesostic = function() {
                 words = word + ' ' + words;
             }
             //just in case, stop after 100 words 
-            if (j++ > 100) return words;
+            if (i++ > 100) return words;
         }
 
         return words;
@@ -363,58 +370,62 @@ window.mesostic = function() {
         spineLetters.push(null);
 
         previousPostLineBreak = '';
-        for(i = 0; i < spineLetters.length -1; i++) {
+    for(i = 0; i < spineLetters.length -1; i++) {
 
-                //find the words between this spine letter and the next
-            parsedWords = parseLineWords(spineLetters[i], spineLetters[i+1], sourceArray, options);
+            //find the words between this spine letter and the next
+        parsedWords = parseLineWords(spineLetters[i], spineLetters[i+1], sourceArray, options);
 
-            lines.push({
-                preSpine: previousPostLineBreak,
-                spine: parsedWords.startSpineLetter,
-                postSpine: parsedWords.preLineBreak
-            });
+        lines.push({
+            preSpine: previousPostLineBreak,
+            spine: parsedWords.startSpineLetter,
+            postSpine: parsedWords.preLineBreak
+        });
 
-            previousPostLineBreak = parsedWords.postLineBreak;
-        }
-
-        return lines;
+        previousPostLineBreak = parsedWords.postLineBreak;
     }
 
-    function getRandomBoolean(options) {
-        var oneChanceIn;
+    return lines;
+}
 
-        switch(options.wingTextSparsity) {
-            case  "very sparse":
-                oneChanceIn = 8;
-                break;
-            case  "sparse": //1 in 4 chance
-                oneChanceIn = 4;
-                break;   
-            case  "normal": //1 in 2 chance
-            default:
-                oneChanceIn = 2;
-        }
-        return 0 === Math.floor(Math.random() * oneChanceIn);
+function getRandomBoolean(options, totalEligibleWords) {
+    var oneChanceIn;
+    var targetWords;
+
+    switch(options.wingTextSparsity) {
+        case  "very sparse":
+            targetWords = 1;
+            break;
+        case  "sparse": //1 in 4 chance
+            targetWords = 4;
+            break;   
+        case  "normal": //1 in 2 chance
+        default:
+            targetWords = 8;
     }
+    //compute pecentage words that should be included
+    var percentage = targetWords / totalEligibleWords;
+    if (percentage > 0.80) percentage = 0.80;
+    return Math.random() <= percentage;
+}
 
-    function getRandomSplit(index1, index2) {
-        return Math.floor((index1 + index2)/2)
-    }
+function getRandomSplit(index1, index2) {
+    return Math.floor((index1 + index2)/2)
+}
 
-    //public parse function
-    pub.parse = function(spineWord, sourceText, myOptions) {
-        options = myOptions;
+//public parse function
+pub.parse = function(spineWord, sourceText, myOptions) {
+    options = myOptions;
 
-        //create source array
-        var sourceArray = createSourceArray(sourceText, options);
+    //create source array
+    var sourceArray = createSourceArray(sourceText, options);
 
-        //parse for spine word
-        var parsing  = createSpineArray(sourceArray, spineWord, options);
-    
-        var resultObject = {parsed: parsing.parsed};
+    //parse for spine word
+    var parsing  = createSpineArray(sourceArray, spineWord, options);
 
-        //create and return ResultObject
-        if(parsing.spineArray.length > 0) {
+    var resultObject = {parsed: parsing.parsed};
+
+    //create and return ResultObject
+    if(parsing.spineArray.length > 0) {
             resultObject.lines = createLines(parsing.spineArray, sourceArray, options);
         }
         else {
@@ -438,7 +449,6 @@ window.mesostic = function() {
             for(var i = 0; i<modifiedSpineWords.length; i++) {
                if (modifiedSpineWords[i] === ' ') breakIndexes.push(i - breakIndexes.length);
             }
-            breakIndexes.push(0);
             console.log(breakIndexes);
         }
 
