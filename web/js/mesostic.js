@@ -449,7 +449,7 @@ pub.parse = function(spineWord, sourceText, myOptions) {
             for(var i = 0; i<modifiedSpineWords.length; i++) {
                if (modifiedSpineWords[i] === ' ') breakIndexes.push(i - breakIndexes.length);
             }
-            console.log(breakIndexes);
+            breakIndexes.push(0);
         }
 
         
