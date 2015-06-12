@@ -310,7 +310,6 @@ window.mesostic = function() {
             eligibleWords.push(word);
         }        
         
-        
         for(i = 0; i < eligibleWords.length; i++) {
             word = eligibleWords[i];
             
@@ -326,7 +325,7 @@ window.mesostic = function() {
                 words = word + ' ' + words;
             }
             //just in case, stop after 100 words 
-            if (i++ > 100) return words;
+            if (i > 100) return words;
         }
 
         return words;
@@ -392,6 +391,8 @@ function getRandomBoolean(options, totalEligibleWords) {
     var targetWords;
 
     switch(options.wingTextSparsity) {
+        case  "none":
+            return true;
         case  "very sparse":
             targetWords = 1;
             break;
