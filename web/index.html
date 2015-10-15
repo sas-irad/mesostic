@@ -16,14 +16,17 @@
     </head>
     <body>
         <h1 class="titlefont"><img class="image-header" src="images/john_cage.jpg" alt=""/></h1>
-    <p class="textfont"><a href="about.html">about the project</a><br>
+
+<div class="body-contents">
     <div class="generatebuttonholder">
         <button class="generatebutton" onclick="doParse();">Generate</button>
         <button class="clearbutton" onclick="document.getElementById('mesostic_content').innerHTML = '';">Clear</button>
     </div>        
-    </p>
+
     <pre id="mesostic_content">
     </pre>
+
+
     <form id="mesosticForm">
     <table border="0" cellspacing="0" cellpadding="0">
           <tbody>
@@ -100,7 +103,7 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
                     <td width="50"><input type="radio" name="strip_punctuation" id="radio2" value="0">
                     <label for="strip_punctuation" class="textfont">no</label></td>
                     <td width="20">&nbsp;</td>
-                    <td><span class="purpletextfont">Note: Strip everything but [a-z][A-Z][0-9]['].</span></td>
+                    <td><span class="description-text">Strip everything but [a-z][A-Z][0-9]['].</span></td>
                   </tr>
                 </tbody>
               </table></td>
@@ -116,10 +119,10 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
               <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                      <td width="120"><input name="sparse_wing_text" type="radio" id="radio5" value="normal" checked>
+                      <td class="slim" width="120"><input name="sparse_wing_text" type="radio" id="radio5" value="normal" checked>
                       <span class="textfont">normal</span></td>
                       <td width="10">&nbsp;</td>
-                      <td><span class="purpletextfont">Note: The more sparse the wing text, the less likely additional words will be included.</span></td>
+                      <td><span class="description-text">Note: The more sparse the wing text, the less likely additional words will be included.</span></td>
                     </tr>
                     <tr>
                       <td width="120"><input type="radio" name="sparse_wing_text" id="radio6" value="sparse">
@@ -160,14 +163,14 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
                       <td width="120"><input name="mesostic_rule" type="radio" id="radio3" value="50" checked>
                       <label for="mesostic_rule3" class="textfont">50% rule</label></td>
                       <td width="10">&nbsp;</td>
-		      <td><span class="purpletextfont">Note: The 50% rule does not permit the second spine letter to appear between spine letters.</span></td>
+		      <td><span class="description-text">The 50% rule does not permit the second spine letter to appear between spine letters.</span></td>
                       <td>&nbsp;</td>
                     </tr>
                     <tr>
                       <td width="120"><input type="radio" name="mesostic_rule" id="radio4" value="100">
                       <label for="mesostic_rule2" class="textfont">100% rule</label></td>
                       <td width="10">&nbsp;</td>
-                      <td><span class="purpletextfont">Note: The 100% rule does not permit either spine letter to appear between spine letters.</span></td>
+                      <td><span class="description-text">The 100% rule does not permit either spine letter to appear between spine letters.</span></td>
                     </tr>
                   </tbody>
               </table></td>
@@ -180,6 +183,7 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
           </tbody>
     </table>
     </form>
+    </div>
 
     </body>
     <script type="text/javascript">
@@ -220,4 +224,12 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
             return result;
         }
     </script>
+    
+        <div class="generatebuttonholder">
+        <button class="generatebutton" onclick="doParse();">Generate</button>
+        <button class="clearbutton" onclick="document.getElementById('mesostic_content').innerHTML = '';">Clear</button>
+    </div> 
+    
+    
+    <p class="textfont right-align"><a href="about.html">about the project</a><br></p>
 </html>
