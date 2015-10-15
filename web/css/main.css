@@ -1,39 +1,15 @@
-#mesostic_content {
-	font-family: courier;
-    white-space: pre;
-    margin: 0 0 40px 0;
-    display:block;
-    font-size:13px;
-}
-
-#mesostic_form {
-	width:100%;
-	max-width: 100%;
-	}
-
-
 h1 {
     color: purple;
 }
 
 body {
-  margin: 0 auto;
-  max-width: 1000px;
-  min-width: 750px;
+  margin: 0 auto 0 auto;
+  max-width: 800px;
 }
-
-.body-contents {
-    padding: 0 10px;
-    width: 100%;
-    margin: 0 auto;
-    max-width: 712px;
-}
-
 
 .image-header {
 	width: 100%;
 	height: auto;
-	background-color: #959595;
 }
 
 #sourcetext {
@@ -67,8 +43,6 @@ body {
     color: red;
     font-decoration: italic;
 }
-
-
 .textfont {
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	font-weight:normal;
@@ -76,15 +50,12 @@ body {
 	color:#000;
 }
 
-
-.description-text {
+.purpletextfont {
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	font-weight:normal;
 	font-size: 11px;
 	color:#5C5C5C;
-	margin: 0 0 0 -5px;
 }
-
 
 .titlefont {
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
@@ -107,8 +78,6 @@ body {
 	color:#000;
 }
 
-
-
 .spine{
     font-size: 20px;
     font-weight: bold;
@@ -116,18 +85,6 @@ body {
     color: red;
 }
 
-#sourcetext, #spineword {
-	width: 80%;
-	}
-
-
-.right-align {
-	margin: 50px 30px 30px 0;
-	display: block;
-	float:right;
-	}
-	
-.slim {width:10px;}
 
 @media (min-width: 500px) and (max-width: 600px) {
 
