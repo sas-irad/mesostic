@@ -1,9 +1,10 @@
 #mesostic_content {
-	font-family: courier;
+	font-family: "Courier New", Courier, monospace, "Lucida Console", Monaco;
     white-space: pre;
     margin: 0 0 40px 0;
     display:block;
     font-size:13px;
+    padding: 0 20px 0 20px;
 }
 
 #mesostic_form {
@@ -19,14 +20,14 @@ h1 {
 body {
   margin: 0 auto;
   max-width: 1000px;
-  min-width: 750px;
+  min-width: 850px;
 }
 
 .body-contents {
     padding: 0 10px;
     width: 100%;
     margin: 0 auto;
-    max-width: 712px;
+    max-width: 750px;
 }
 
 
@@ -37,13 +38,14 @@ body {
 }
 
 #sourcetext {
-	width: 60%;
 	height: 150px;
+		width: 80%;
 }
 
 #spineword {
-	width: 60%;
+	width: 80%;
 }
+
 
 .generatebuttonholder {
 	max-width: 200px;
@@ -107,8 +109,6 @@ body {
 	color:#000;
 }
 
-
-
 .spine{
     font-size: 20px;
     font-weight: bold;
@@ -116,20 +116,27 @@ body {
     color: red;
 }
 
-#sourcetext, #spineword {
-	width: 80%;
-	}
-
-
 .right-align {
 	margin: 50px 30px 30px 0;
 	display: block;
 	float:right;
 	}
 	
-.slim {width:10px;}
+/* I was trying to figure out a way to make the generated mesostic display better on mobile devices.
+On iPhone 5S, mesostic spills beyond page width and leaves no margin/padding. cmart 10162015
 
-@media (min-width: 500px) and (max-width: 600px) {
+@media (min-width: 10px) and (max-width: 1025px) {
 
+body {
+  max-width: 1250px;
+  min-width: 1250px;
+}
+
+.body-contents {
+    max-width: 1250px;
+}
 
 }
+
+
+*/
