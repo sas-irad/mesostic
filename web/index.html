@@ -11,6 +11,8 @@
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/Hyphenator/Hyphenator.js" ></script>
+        <script src="js/vendor/Hyphenator/patterns/en-us.js"></script>
         <script src="js/mesostic.js"></script>
         <script src="js/vendor/pad.js"></script>
     </head>
@@ -176,9 +178,26 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
               </table></td>
             </tr>
             <tr>
-              <td><div align="right" class="textfont"></div></td>
+              <td valign="top">&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td><div align="right"><span class="textfont">use syllable rule?</span></div></td>
+              <td>&nbsp;</td>
+              <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td width="50"><input name="no_repeat_syllables" id="no_repeat_syllables1" type="radio"  value="0" checked>
+                    <label for="no_repeat_syllables1"  class="textfont">no</label></td>
+                    <td width="10">&nbsp;</td>
+                    <td width="50"><input type="radio" id="no_repeat_syllables2" name="no_repeat_syllables" value="1">
+                    <label for="strip_punctuation" class="textfont">yes</label></td>
+                    <td width="75">&nbsp;</td>
+                    <td><span class="description-text">If a syllable in the text has been matched don't match it again.</span></td>
+                  </tr>
+                </tbody>
+              </table></td>
             </tr>
           </tbody>
     </table>
@@ -201,7 +220,7 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
             }
             return val; // return value of checked radio or undefined if none checked
         };
-
+        Hyphenator.config({hyphenchar: '-', minwordlength: 1});
         function doParse() {
             var spineWords = document.getElementById('spineword').value;
             var sourceText = document.getElementById('sourcetext').value;
@@ -210,7 +229,11 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
                 spineLoops: document.getElementById('number_mesostics').value,
                 stripPunctuation: getRadioVal('strip_punctuation') === "1",
                 stanzaBreaks: getRadioVal('stanzas_break'),
-                wingTextSparsity: getRadioVal('sparse_wing_text')
+                wingTextSparsity: getRadioVal('sparse_wing_text'),
+                noRepeatSyllables: getRadioVal('no_repeat_syllables') === "1",
+                syllableSplitter: function(word) {
+                    return Hyphenator.hyphenate(word,'en-us').split('-');
+                }
             };
             var result = mesostic.parse(spineWords, sourceText, options);
             var text = mesostic.formatText(result, spineWords, options);

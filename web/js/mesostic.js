@@ -94,6 +94,9 @@ window.mesostic = function() {
             rule = options.rule || '50',
             loops = options.spineLoops || 1,
             spineLetterCount = spineLength * loops,
+            noRepeatSyllables = options.noRepeatSyllables,
+            syllableSplitter = options.syllableSplitter || function(word) { return [word]; },
+            spineSyllables = [],
             found = false,
             i = 0, // spine index
             j = 0; // source index
@@ -112,12 +115,10 @@ window.mesostic = function() {
                     'index': j % sourceArray.length,
                     'pre': letterIndex, 'post': currentWord.length - (letterIndex + 1)};
                 if (rule === 'basic') {
-                    currentSpineArray.push(success);
                     found = true;
                 }
                 else if (rule === '50') {
                     if (currentWord.substring(letterIndex+1).indexOf(nextSpineLetter) === -1) {
-                        currentSpineArray.push(success);
                         found = true;
                     }
                 }
@@ -126,12 +127,23 @@ window.mesostic = function() {
                         currentWord.substring(0,letterIndex-1).indexOf(prevSpineLetter) === -1 &&
                        currentWord.indexOf(currentSpineLetter) ===
                        currentWord.lastIndexOf(currentSpineLetter)) {
-                            currentSpineArray.push(success);
                             found = true;
                     }
                 }
             }
+            //check for a syllable that has already been matched
+            if (found && noRepeatSyllables) {
+                syllable = getLetterSyllable(syllableSplitter(currentWord), letterIndex);
+                if(spineSyllables.indexOf(syllable) > -1) {
+                    found = false;
+                }
+                else {
+                    spineSyllables.push(syllable);
+                }
+            }
+
             if (found) {
+                currentSpineArray.push(success);
                 i++;
                 if (i % spineLength === 0) {
                     resultArray.push(currentSpineArray);
@@ -159,6 +171,15 @@ window.mesostic = function() {
     }
 
 
+    function getLetterSyllable(syllables, letterIndex) {
+        var i, letterCount = 0;
+        for(i=0; i < syllables.length; i++) {
+            letterCount = letterCount + syllables[i].length;
+            if(letterCount > letterIndex) {
+                return syllables[i];
+            }
+        }
+    }
     /**
      * Function to take two spine letters and find the words that should occur between them
      *
