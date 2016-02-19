@@ -116,14 +116,14 @@ window.mesostic = function() {
                     found = true;
                 }
                 else if (rule === '50') {
-                    if (currentWord.indexOf(nextSpineLetter) === -1) {
+                    if (currentWord.substring(letterIndex+1).indexOf(nextSpineLetter) === -1) {
                         currentSpineArray.push(success);
                         found = true;
                     }
                 }
                 else if (rule === '100') {
-                    if (currentWord.indexOf(nextSpineLetter) === -1 && 
-                        currentWord.indexOf(prevSpineLetter) === -1 &&
+                    if (currentWord.substring(letterIndex+1).indexOf(nextSpineLetter) === -1 && 
+                        currentWord.substring(0,letterIndex-1).indexOf(prevSpineLetter) === -1 &&
                        currentWord.indexOf(currentSpineLetter) ===
                        currentWord.lastIndexOf(currentSpineLetter)) {
                             currentSpineArray.push(success);
