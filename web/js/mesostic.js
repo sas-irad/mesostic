@@ -1,4 +1,10 @@
-window.mesostic = function() {
+/**
+    Mesostic Poem Generator
+
+    syllableSpitter is a function that takes a string and returns an array of syllables
+
+*/
+window.mesostic = function(syllableSplitter) {
 
     /**
      * Array of words from the source text formatted according to options
@@ -390,64 +396,64 @@ window.mesostic = function() {
         spineLetters.push(null);
 
         previousPostLineBreak = '';
-    for(i = 0; i < spineLetters.length -1; i++) {
+        for(i = 0; i < spineLetters.length -1; i++) {
 
-            //find the words between this spine letter and the next
-        parsedWords = parseLineWords(spineLetters[i], spineLetters[i+1], sourceArray, options);
+                //find the words between this spine letter and the next
+            parsedWords = parseLineWords(spineLetters[i], spineLetters[i+1], sourceArray, options);
 
-        lines.push({
-            preSpine: previousPostLineBreak,
-            spine: parsedWords.startSpineLetter,
-            postSpine: parsedWords.preLineBreak
-        });
+            lines.push({
+                preSpine: previousPostLineBreak,
+                spine: parsedWords.startSpineLetter,
+                postSpine: parsedWords.preLineBreak
+            });
 
-        previousPostLineBreak = parsedWords.postLineBreak;
+            previousPostLineBreak = parsedWords.postLineBreak;
+        }
+
+        return lines;
     }
 
-    return lines;
-}
+    function getRandomBoolean(options, totalEligibleWords) {
+        var oneChanceIn;
+        var targetWords;
 
-function getRandomBoolean(options, totalEligibleWords) {
-    var oneChanceIn;
-    var targetWords;
-
-    switch(options.wingTextSparsity) {
-        case  "none":
-            return true;
-        case  "very sparse":
-            targetWords = 1;
-            break;
-        case  "sparse": //1 in 4 chance
-            targetWords = 4;
-            break;   
-        case  "normal": //1 in 2 chance
-        default:
-            targetWords = 8;
+        switch(options.wingTextSparsity) {
+            case  "none":
+                return true;
+            case  "very sparse":
+                targetWords = 1;
+                break;
+            case  "sparse": //1 in 4 chance
+                targetWords = 4;
+                break;   
+            case  "normal": //1 in 2 chance
+            default:
+                targetWords = 8;
+        }
+        //compute pecentage words that should be included
+        var percentage = targetWords / totalEligibleWords;
+        if (percentage > 0.80) percentage = 0.80;
+        return Math.random() <= percentage;
     }
-    //compute pecentage words that should be included
-    var percentage = targetWords / totalEligibleWords;
-    if (percentage > 0.80) percentage = 0.80;
-    return Math.random() <= percentage;
-}
 
-function getRandomSplit(index1, index2) {
-    return Math.floor((index1 + index2)/2)
-}
+    function getRandomSplit(index1, index2) {
+        return Math.floor((index1 + index2)/2)
+    }
 
-//public parse function
-pub.parse = function(spineWord, sourceText, myOptions) {
-    options = myOptions;
+    //public parse function
+    pub.parse = function(spineWord, sourceText, myOptions) {
+        options = myOptions;
 
-    //create source array
-    var sourceArray = createSourceArray(sourceText, options);
+        //create source array
+        var sourceArray = createSourceArray(sourceText, options);
 
-    //parse for spine word
-    var parsing  = createSpineArray(sourceArray, spineWord, options);
+        //parse for spine word
+        var parsing  = createSpineArray(sourceArray, spineWord, options);
 
-    var resultObject = {parsed: parsing.parsed};
+        var resultObject = {parsed: parsing.parsed};
 
-    //create and return ResultObject
-    if(parsing.spineArray.length > 0) {
+        //create and return ResultObject
+        if(parsing.spineArray.length > 0) {
             resultObject.lines = createLines(parsing.spineArray, sourceArray, options);
         }
         else {
@@ -498,6 +504,8 @@ pub.parse = function(spineWord, sourceText, myOptions) {
         return text;
     };
 
+
+    
     /* test-code */
     //These added so internal methods can be tested
     pub._createSourceArray = createSourceArray;
@@ -509,4 +517,4 @@ pub.parse = function(spineWord, sourceText, myOptions) {
     //set the mesostomatic parser to the public api
     return pub;
 
-}();
+}(syllableSplitter);
