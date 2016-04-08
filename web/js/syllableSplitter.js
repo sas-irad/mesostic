@@ -24,7 +24,6 @@ var syllableSplitter = function(window, Hyphenator) {
         Hyphenator.config(defaultHyphenatorOptions);
         
         //do this to force the loading of the language so we can modify the right/left min
-        console.log(window.document.getElementsByClassName('hyphenate'));
         document.getElementsByClassName('hyphenate')[0].setAttribute('lang', container.language);
         Hyphenator.run();
     }
