@@ -259,11 +259,9 @@ QUnit.test('parseLineWords', function(assert) {
 
     parsed = testFunc(null,spineArray[0], sourceArray, options);
     assert.equal(parsed.startSpineLetter,'', 'check empty start spine letter'); 
-    console.log(parsed);
 
     parsed = testFunc(spineArray[3], null,  sourceArray, options);
     assert.equal(parsed.endSpineLetter,'', 'check empty end spine letter'); 
-    console.log(parsed);    
     
     parsed = testFunc(spineArray[2],spineArray[3], sourceArray, options);
     assert.equal(parsed.startSpineLetter, 'o','check start spine letter');
@@ -273,4 +271,58 @@ QUnit.test('parseLineWords', function(assert) {
     assert.equal(parsed.postLineBreak.substr(parsed.postLineBreak.length - 1), 'i', 'check postline break');
 });
 
+//#########################createSourceArray testing ##############
+QUnit.test( "createSourceArray", function( assert ) {
+    var testFunc = mesostic._createSourceArray;
+    var sourceText;
+    var sourceArray;
+    var expectedResult = ['here', 'is', 'the', 'source', 'text'];
+    var options = {
+        stripPunctuation: true,
+    };
+    
+    //test vanilla example
+    sourceText = 'here is the source text';
+    sourceArray = testFunc(sourceText, options);
+    assert.deepEqual(sourceArray, expectedResult, 'test vanilla')
 
+    //test capitalization example
+    sourceText = 'here Is the SouRce text';
+    sourceArray = testFunc(sourceText, options);
+    assert.deepEqual(sourceArray, expectedResult, 'test capitalization')
+
+    //test some double spaces
+    sourceText = ' Here   is     the source  text ';
+    sourceArray = testFunc(sourceText, options);
+    assert.deepEqual(sourceArray, expectedResult, 'ignore double spaces');
+});
+
+//##########################syllable Splitter testing ###############
+QUnit.test( "syllableSplitter", function (assert) {
+
+    var testWord = 'indeterminent';
+    var expectedResult = ['in','de','ter','mi','nent'];
+
+    assert.deepEqual(syllableSplitter.splitWord(testWord), expectedResult, 'check syllable splitter - indeterminent');
+
+    var testWord = 'happy';
+    var expectedResult = ['hap','py'];
+
+    assert.deepEqual(syllableSplitter.splitWord(testWord), expectedResult, 'check syllable splitter - happy');
+
+    var testWord = 'amazing';
+    var expectedResult = ['a','maz', 'ing'];
+
+    assert.deepEqual(syllableSplitter.splitWord(testWord), expectedResult, 'check syllable splitter - amazing');
+
+    
+    //test if we can grab the right syllable
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 0), 'a', 'check syllable at position 0/amazing');
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 1), 'maz', 'check syllable at position 1/amazing');
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 2), 'maz', 'check syllable at position 2/amazing');
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 3), 'maz', 'check syllable at position 3/amazing');
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 4), 'ing', 'check syllable at position 4/amazing');
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 5), 'ing', 'check syllable at position 5/amazing');
+    assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 6), 'ing', 'check syllable at position 6/amazing');
+
+});
