@@ -104,6 +104,7 @@ window.mesostic = function(syllableSplitter) {
             syllableFinder = options.syllableFinder || function(word) { return [word]; },
             spineSyllables = [],
             found = false,
+            lastFoundJIndex = 0,
             i = 0, // spine index
             j = 0; // source index
         
@@ -151,6 +152,7 @@ window.mesostic = function(syllableSplitter) {
             if (found) {
                 currentSpineArray.push(success);
                 i++;
+                lastFoundJIndex = j;
                 if (i % spineLength === 0) {
                     resultArray.push(currentSpineArray);
                     currentSpineArray = new Array();
@@ -160,13 +162,11 @@ window.mesostic = function(syllableSplitter) {
             j++;
 
             //give up after 10 tries through the source text if you haven't found one yet 
-            if (j > sourceArray.length * 10 && resultArray.length == 0) {
+            if (j - lastFoundJIndex > sourceArray.length + 1) {
                 if(currentSpineArray.length > 0 ) {
-                    return {parsed: false, spineArray: new Array(currentSpineArray)};
+                    resultArray.push(currentSpineArray);
                 }
-                else {
-                    return {parsed: false, spineArray: new Array()};
-                }
+                return {parsed: false, spineArray: resultArray};
             }
         }
         return {

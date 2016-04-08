@@ -271,31 +271,6 @@ QUnit.test('parseLineWords', function(assert) {
     assert.equal(parsed.postLineBreak.substr(parsed.postLineBreak.length - 1), 'i', 'check postline break');
 });
 
-//#########################createSourceArray testing ##############
-QUnit.test( "createSourceArray", function( assert ) {
-    var testFunc = mesostic._createSourceArray;
-    var sourceText;
-    var sourceArray;
-    var expectedResult = ['here', 'is', 'the', 'source', 'text'];
-    var options = {
-        stripPunctuation: true,
-    };
-    
-    //test vanilla example
-    sourceText = 'here is the source text';
-    sourceArray = testFunc(sourceText, options);
-    assert.deepEqual(sourceArray, expectedResult, 'test vanilla')
-
-    //test capitalization example
-    sourceText = 'here Is the SouRce text';
-    sourceArray = testFunc(sourceText, options);
-    assert.deepEqual(sourceArray, expectedResult, 'test capitalization')
-
-    //test some double spaces
-    sourceText = ' Here   is     the source  text ';
-    sourceArray = testFunc(sourceText, options);
-    assert.deepEqual(sourceArray, expectedResult, 'ignore double spaces');
-});
 
 //##########################syllable Splitter testing ###############
 QUnit.test( "syllableSplitter", function (assert) {
@@ -310,8 +285,8 @@ QUnit.test( "syllableSplitter", function (assert) {
 
     assert.deepEqual(syllableSplitter.splitWord(testWord), expectedResult, 'check syllable splitter - happy');
 
-    var testWord = 'amazing';
-    var expectedResult = ['a','maz', 'ing'];
+    var testWord = 'babble';
+    var expectedResult = ['bab','ble'];
 
     assert.deepEqual(syllableSplitter.splitWord(testWord), expectedResult, 'check syllable splitter - amazing');
 
@@ -325,4 +300,60 @@ QUnit.test( "syllableSplitter", function (assert) {
     assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 5), 'ing', 'check syllable at position 5/amazing');
     assert.equal(syllableSplitter.findSyllableAtPosition('amazing', 6), 'ing', 'check syllable at position 6/amazing');
 
+});
+
+
+//#########################createSpineArray Testing ######################Y
+QUnit.test( "createSpineArrayNoRepeatSyllables", function( assert ) {
+  
+
+    var testFunc = mesostic._createSpineArray;
+    var spineWord;
+    var spineArray;
+    var sourceArray;
+    var expectedResult;
+    var options = {
+        stripPunctuation: true,
+        rule: "basic",
+        spineLoops: 1,
+        noRepeatSyllables : true,
+        syllableFinder : syllableSplitter.findSyllableAtPosition
+    };
+
+    spineWord = 'abab';
+    sourceArray = [
+        'brother',   //0    
+        'babbling',  //1
+        'babble',    //2
+        'about',     //3
+        'abstince',  //4
+        'babboon',   //5
+        'breifs',    //6
+        'anothoer',  //7
+        'loop'       //8
+    ];
+    
+    //basic one loop
+    spineArray = testFunc(sourceArray, spineWord, options);
+    expectedResult = {parsed: true, spineArray: [[
+        {spineLetter: 'a', index:1, pre:1, post:6}, //babbling
+        {spineLetter: 'b', index:3, pre:1, post:3},//about
+        {spineLetter: 'a', index:4, pre:0, post:7},//abstinence
+        {spineLetter: 'b', index:6, pre:0, post:5},//briefs
+    ]]};
+    assert.deepEqual(spineArray, expectedResult, 'basic 1 loop');
+
+    //basic two loop -- will fail because syllables are used up
+    options.spineLoops = 2;
+    spineArray = testFunc(sourceArray, spineWord, options);
+    expectedResult = {parsed: false, spineArray: [[
+        {spineLetter: 'a', index:1, pre:1, post:6}, //babbling
+        {spineLetter: 'b', index:3, pre:1, post:3},//about
+        {spineLetter: 'a', index:4, pre:0, post:7},//abstinence
+        {spineLetter: 'b', index:6, pre:0, post:5},//briefs
+    ],[
+        {spineLetter: 'a', index:7, pre:0, post:7},//another
+        {spineLetter: 'b', index:0, pre:0, post:6},//brother
+    ]]};
+    assert.deepEqual(spineArray, expectedResult, 'basic 1 loop');
 });

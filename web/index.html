@@ -221,7 +221,6 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
             }
             return val; // return value of checked radio or undefined if none checked
         };
-        Hyphenator.config({hyphenchar: '-', minwordlength: 1});
         function doParse() {
             var spineWords = document.getElementById('spineword').value;
             var sourceText = document.getElementById('sourcetext').value;
@@ -232,11 +231,10 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
                 stanzaBreaks: getRadioVal('stanzas_break'),
                 wingTextSparsity: getRadioVal('sparse_wing_text'),
                 noRepeatSyllables: getRadioVal('no_repeat_syllables') === "1",
-                syllableSplitter: function(word) {
-                    return Hyphenator.hyphenate(word,'en-us').split('-');
-                }
+                syllableFinder: syllableSplitter.findSyllableAtPosition
             };
             var result = mesostic.parse(spineWords, sourceText, options);
+            console.log(result);
             var text = mesostic.formatText(result, spineWords, options);
             if(result.parsed) {
                 document.getElementById('mesostic_content').innerHTML = text;
