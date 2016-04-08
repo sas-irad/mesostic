@@ -1,4 +1,4 @@
-var syllableSplitter = function(Hyphenator) {
+var syllableSplitter = function(window, Hyphenator) {
 
     var container = this;
     container.language = 'en-us';
@@ -14,14 +14,19 @@ var syllableSplitter = function(Hyphenator) {
         var defaultHyphenatorOptions = {
             defaultlanguage: container.language,
             minwordlength: 2,
-            hyphenchar : container.splitChar
+            hyphenchar : container.splitChar,
+            remoteloading: true,
+            onhyphenationdonecallback: function() {
+                Hyphenator.languages[container.language].rightmin = 2;
+                Hyphenator.languages[container.language].leftmin = 1;
+            }
         }
         Hyphenator.config(defaultHyphenatorOptions);
         
         //do this to force the loading of the language so we can modify the right/left min
-        Hyphenator.hyphenate('force load', container.language);
-        Hyphenator.languages[container.language].rightmin = 2;
-        Hyphenator.languages[container.language].leftmin = 1;
+        console.log(window.document.getElementsByClassName('hyphenate'));
+        document.getElementsByClassName('hyphenate')[0].setAttribute('lang', container.language);
+        Hyphenator.run();
     }
 
     //hyphenate the word then split the word into syllables
@@ -53,7 +58,7 @@ var syllableSplitter = function(Hyphenator) {
     //run the config to start things off
     container.config();
 
-    //return the public methods
+
     return container;
 
-}(Hyphenator);
+}(window, Hyphenator);
