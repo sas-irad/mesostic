@@ -100,8 +100,8 @@ window.mesostic = function(syllableSplitter) {
             rule = options.rule || '50',
             loops = options.spineLoops || 1,
             spineLetterCount = spineLength * loops,
-            noRepeatSyllables = options.noRepeatSyllables,
-            syllableSplitter = options.syllableSplitter || function(word) { return [word]; },
+            noRepeatSyllables = options.noRepeatSyllables || false,
+            syllableFinder = options.syllableFinder || function(word) { return [word]; },
             spineSyllables = [],
             found = false,
             i = 0, // spine index
@@ -139,7 +139,7 @@ window.mesostic = function(syllableSplitter) {
             }
             //check for a syllable that has already been matched
             if (found && noRepeatSyllables) {
-                syllable = getLetterSyllable(syllableSplitter(currentWord), letterIndex);
+                syllable = syllableFinder(currentWord, letterIndex);
                 if(spineSyllables.indexOf(syllable) > -1) {
                     found = false;
                 }
@@ -177,15 +177,6 @@ window.mesostic = function(syllableSplitter) {
     }
 
 
-    function getLetterSyllable(syllables, letterIndex) {
-        var i, letterCount = 0;
-        for(i=0; i < syllables.length; i++) {
-            letterCount = letterCount + syllables[i].length;
-            if(letterCount > letterIndex) {
-                return syllables[i];
-            }
-        }
-    }
     /**
      * Function to take two spine letters and find the words that should occur between them
      *
