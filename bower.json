@@ -1,0 +1,27 @@
+{
+  "name": "mesostic",
+  "version": "0.0.0",
+  "homepage": "https://github.com/sas-irad/mesostic",
+  "authors": [
+    "J. Reuben Wetherbee <wetherbe@sas.upenn.edu>"
+  ],
+  "description": "Library to help parse text into a mesostic poem",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "john",
+    "cage"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Hyphenator": "^5.1.0"
+  }
+}
