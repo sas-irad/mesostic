@@ -43,6 +43,7 @@ window.mesostic = function(syllableSplitter) {
      *      stripPunctuation: true, (flag to remove punctuation from the source text or not)
      *      stanzaBreaks: "spineWord"|"random"|[0-9]+, (when to make stanza breaks, defaults to spineWord)
      *      wingTextSparsity: "normal"|"sparse"|"very sparse"
+     *      restrictLineLength: true (flag to indicate if the line length should be restricted to 90)
      * }
      */
     var options = {};
@@ -312,6 +313,10 @@ window.mesostic = function(syllableSplitter) {
         var words = spineWordPart;
         var word;
         var eligibleWords = [];
+        var restrictLineLength = true;
+        
+        if("restrictLineLength" in options) restrictLineLength = options.restrictLineLength;
+        if(!restrictLineLength) maxLength = 9999999999;
         
         //find the words that are eligible
         wordLoop:
@@ -343,7 +348,7 @@ window.mesostic = function(syllableSplitter) {
                 words = word + ' ' + words;
             }
             //just in case, stop after 100 words 
-            if (i > 100) return words;
+            if (i > 100 && restrictLineLength) return words;
         }
 
         return words;

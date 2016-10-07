@@ -179,6 +179,23 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
               <td>&nbsp;</td>
             </tr>
             <tr>
+              <td><div align="right"><span class="textfont">limit line length?</span></div></td>
+              <td>&nbsp;</td>
+              <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td width="50"><input name="limit_line_length" type="radio" id="limit_line_length" value="1" checked>
+                    <span class="textfont">yes</span></td>
+                    <td width="10">&nbsp;</td>
+                    <td width="50"><input type="radio" name="limit_line_length" id="no_limit_line_length" value="0">
+                    <label for="no_limit_line_length" class="textfont">no</label></td>
+                    <td width="75">&nbsp;</td>
+                    <td><span class="description-text">limit line length to 90 characters to fit on screen</span></td>
+                  </tr>
+                </tbody>
+              </table></td>
+            </tr>
+            <tr>
               <td><div align="right"><span class="textfont">use syllable rule?</span></div></td>
               <td>&nbsp;</td>
               <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -295,7 +312,8 @@ Like acrostics, mesotics are written in the conventional way horizontally, but a
                 stanzaBreaks: getRadioVal('stanzas_break'),
                 wingTextSparsity: getRadioVal('sparse_wing_text'),
                 noRepeatSyllables: getRadioVal('no_repeat_syllables') === "1",
-                syllableFinder: syllableSplitter.findSyllableAtPosition
+                syllableFinder: syllableSplitter.findSyllableAtPosition,
+                restrictLineLength: getRadioVal('limit_line_length') === "1"
             };
             var result = mesostic.parse(spineWords, sourceText, options);
             var text = mesostic.formatText(result, spineWords, options);
